@@ -3,10 +3,11 @@ import { UserEntity } from '@app/modules/user/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { UserResponse } from './types/user-response.interface';
 import { LoginUserDto } from '@app/dto/login-user.dto';
 import { compare } from 'bcrypt';
+import { env } from '@app/config/env';
 
 @Injectable()
 export class UserService {
@@ -79,5 +80,20 @@ export class UserService {
       },
       'secret',
     );
+  }
+
+  async getUserByToken(token: string): Promise<UserEntity> {
+    const userInToken = verify(token, env.JWT_SECRET) as {
+      id: number;
+      username: string;
+      email: string;
+    };
+
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userInToken.id,
+      },
+    });
+    return user;
   }
 }
