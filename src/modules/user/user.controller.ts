@@ -1,15 +1,18 @@
 import { CreateUserDto } from '@app/dto/create-user.dto';
 import { LoginUserDto } from '@app/dto/login-user.dto';
-import { ExpressRequest } from '@app/types/express-request.interface';
+import { UpdateUserDto } from '@app/dto/update-user.dto';
 import {
   Body,
   Controller,
   Get,
   Post,
-  Req,
+  Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { User } from './decorators/user.decorator';
+import { IllegalPasswordAlteration } from './guards/illegal-password-alteration.guard';
 import { UserResponse } from './types/user-response.interface';
 import { UserService } from './user.service';
 
@@ -35,7 +38,18 @@ export class UserController {
 
   @Get()
   @UsePipes(new ValidationPipe())
-  currentUser(@Req() req: ExpressRequest): UserResponse {
-    return this.userService.buildUserResponse(req.user);
+  currentUser(@User() user: any): UserResponse {
+    return this.userService.buildUserResponse(user);
+  }
+
+  @Put()
+  @UsePipes(new ValidationPipe())
+  @UseGuards(IllegalPasswordAlteration)
+  async updateUser(
+    @Body('user') updateUserDto: UpdateUserDto,
+    @User('id') id: number,
+  ): Promise<UserResponse> {
+    const userEntity = await this.userService.updateUser(id, updateUserDto);
+    return this.userService.buildUserResponse(userEntity);
   }
 }

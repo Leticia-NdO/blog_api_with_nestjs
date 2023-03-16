@@ -14,9 +14,15 @@ import { AuthMiddleWare } from './modules/user/middleware/auth-middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleWare).forRoutes({
-      path: 'users',
-      method: RequestMethod.GET,
-    });
+    consumer.apply(AuthMiddleWare).forRoutes(
+      {
+        path: 'users',
+        method: RequestMethod.GET,
+      },
+      {
+        path: 'users',
+        method: RequestMethod.PUT,
+      },
+    );
   }
 }

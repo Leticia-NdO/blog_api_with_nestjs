@@ -17,6 +17,7 @@ export class AuthMiddleWare implements NestMiddleware {
     if (!token) throw new HttpException('Access Denied', HttpStatus.FORBIDDEN);
     try {
       const user = await this.userService.loadUserByToken(token);
+      if (!user) throw new HttpException('Access Denied', HttpStatus.FORBIDDEN);
       req.user = user;
       next();
     } catch (err) {

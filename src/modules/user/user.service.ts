@@ -9,6 +9,7 @@ import { LoginUserDto } from '@app/dto/login-user.dto';
 import { compare } from 'bcrypt';
 import { env } from '@app/config/env';
 import { UserType } from './types/user.type';
+import { UpdateUserDto } from '@app/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -75,6 +76,60 @@ export class UserService {
     }
 
     throw new HttpException('Access Denied', HttpStatus.FORBIDDEN);
+  }
+
+  async updateUser(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    if (updateUserDto.email) {
+      const emailExists = await this.loadUserByEmail(updateUserDto.email);
+      if (emailExists && emailExists.id !== userId) {
+        throw new HttpException('Email already in use', HttpStatus.CONFLICT);
+      }
+    }
+
+    if (updateUserDto.username) {
+      const usernameExists = await this.loadUserByEmail(updateUserDto.username);
+      if (usernameExists && usernameExists.id !== userId) {
+        throw new HttpException('Username already in use', HttpStatus.CONFLICT);
+      }
+    }
+
+    await this.userRepository.update(
+      {
+        id: userId,
+      },
+      updateUserDto,
+    );
+
+    const updatedUser = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    return updatedUser;
+  }
+
+  async loadUserByEmail(email: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    return user;
+  }
+
+  async loadUserUsername(username: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        username,
+      },
+    });
+
+    return user;
   }
 
   buildUserResponse(userEntity: UserEntity): UserResponse {
