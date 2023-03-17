@@ -1,6 +1,6 @@
-import { CreateUserDto } from '@app/dto/create-user.dto';
-import { LoginUserDto } from '@app/dto/login-user.dto';
-import { UpdateUserDto } from '@app/dto/update-user.dto';
+import { CreateUserDto } from '@app/modules/user/dto/create-user.dto';
+import { LoginUserDto } from '@app/modules/user/dto/login-user.dto';
+import { UpdateUserDto } from '@app/modules/user/dto/update-user.dto';
 import {
   Body,
   Controller,

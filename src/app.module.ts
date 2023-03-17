@@ -29,6 +29,14 @@ export class AppModule {
         path: 'users',
         method: RequestMethod.PUT,
       },
+      {
+        path: 'articles',
+        method: RequestMethod.ALL,
+      },
+      {
+        path: 'articles/:slug',
+        method: RequestMethod.DELETE,
+      },
     );
   }
 }

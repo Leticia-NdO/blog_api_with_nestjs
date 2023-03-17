@@ -1,5 +1,12 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { hash } from 'bcrypt';
+import { ArticleEntity } from '../article/article.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -25,4 +32,8 @@ export class UserEntity {
   async hashPassword() {
     this.password = await hash(this.password, 12);
   }
+
+  // it means one User can have severeal articles, and the second argument says the name of the foreign key to be created at articles with the name of 'author'
+  @OneToMany(() => ArticleEntity, (article) => article.author)
+  articles: ArticleEntity[];
 }
