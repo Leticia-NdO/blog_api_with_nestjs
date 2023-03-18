@@ -85,16 +85,16 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(articleEntity);
   }
 
-  // @Delete(':slug/favorite')
-  // async dislikeArticle(
-  //   @Param('slug') slug: string,
-  //   @User('id') userId: number,
-  // ): Promise<ArticleResponseInterface> {
-  //   const articleEntity = await this.articleService.dislikeArticle(
-  //     userId,
-  //     slug,
-  //   );
+  @Delete(':slug/favorite')
+  async dislikeArticle(
+    @Param('slug') slug: string,
+    @User('id') userId: number,
+  ): Promise<ArticleResponseInterface> {
+    const articleEntity = await this.articleService.dislikeArticle(
+      userId,
+      slug,
+    );
 
-  //   return this.articleService.buildArticleResponse(articleEntity);
-  // }
+    return this.articleService.buildArticleResponse(articleEntity);
+  }
 }

@@ -45,6 +45,10 @@ export class AppModule {
         path: 'articles/:slug/favorite',
         method: RequestMethod.POST,
       },
+      {
+        path: 'articles/:slug/favorite',
+        method: RequestMethod.DELETE,
+      },
     );
   }
 }

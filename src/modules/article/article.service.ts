@@ -160,12 +160,28 @@ export class ArticleService {
 
   async dislikeArticle(userId: number, slug: string): Promise<ArticleEntity> {
     const article = await this.loadArticleBySlug(slug);
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['favorites'],
+    });
 
     if (!article)
       throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
 
-    if (article.author.id !== userId)
-      throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
+    const articleFavoriteIndex = user.favorites.findIndex(
+      (articleInFavorites) => articleInFavorites.id === article.id,
+    );
+
+    console.log(user);
+
+    if (articleFavoriteIndex >= 0) {
+      user.favorites.splice(articleFavoriteIndex, 1);
+      article.favorites--;
+      await this.userRepository.save(user);
+      await this.articleRepository.save(article);
+    }
 
     return article;
   }
