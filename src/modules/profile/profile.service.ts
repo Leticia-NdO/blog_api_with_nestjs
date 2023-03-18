@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
+import { FollowEntity } from './follow.entity';
 import { ProfileResponseInterface } from './types/profile-response.interface';
 import { Profile } from './types/profile.interface';
 
@@ -10,6 +11,8 @@ export class ProfileService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(FollowEntity)
+    private readonly followRepository: Repository<FollowEntity>,
   ) {}
   async getProfile(username: string, userId: number): Promise<Profile> {
     const profile = await this.userRepository.findOne({
@@ -17,6 +20,76 @@ export class ProfileService {
         username,
       },
     });
+
+    if (!username)
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+
+    return {
+      ...profile,
+      following: false,
+    };
+  }
+
+  async followProfile(username: string, userId: number): Promise<Profile> {
+    const profile = await this.userRepository.findOne({
+      where: {
+        username,
+      },
+    });
+
+    if (!username)
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+
+    if (userId === profile.id)
+      throw new HttpException(
+        'Follower and Following must be different',
+        HttpStatus.NOT_FOUND,
+      );
+    const follow = await this.followRepository.findOne({
+      where: {
+        followerId: userId,
+        followingId: profile.id,
+      },
+    });
+
+    if (!follow) {
+      const followToCreate = new FollowEntity();
+      followToCreate.followerId = userId;
+      followToCreate.followingId = profile.id;
+      await this.followRepository.save(followToCreate);
+    }
+
+    return {
+      ...profile,
+      following: true,
+    };
+  }
+
+  async unfollowProfile(username: string, userId: number): Promise<Profile> {
+    const profile = await this.userRepository.findOne({
+      where: {
+        username,
+      },
+    });
+
+    if (!username)
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+
+    if (userId === profile.id)
+      throw new HttpException(
+        'Unfollower and Unfollowing must be different',
+        HttpStatus.NOT_FOUND,
+      );
+    const follow = await this.followRepository.findOne({
+      where: {
+        followerId: userId,
+        followingId: profile.id,
+      },
+    });
+
+    if (follow) {
+      await this.followRepository.delete(follow.id);
+    }
 
     return {
       ...profile,

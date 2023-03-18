@@ -14,8 +14,8 @@ import { ProfileModule } from './modules/profile/profile.module';
     TypeOrmModule.forRoot(config),
     TagModule,
     UserModule,
-    ArticleModule,
     ProfileModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -58,6 +58,14 @@ export class AppModule {
       {
         path: 'profiles/:username',
         method: RequestMethod.GET,
+      },
+      {
+        path: 'profiles/:username/follow',
+        method: RequestMethod.POST,
+      },
+      {
+        path: 'profiles/:username/follow',
+        method: RequestMethod.DELETE,
       },
     );
   }

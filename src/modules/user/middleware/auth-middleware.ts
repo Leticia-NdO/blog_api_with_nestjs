@@ -11,18 +11,19 @@ export class AuthMiddleWare implements NestMiddleware {
     if (!req.headers.authorization) {
       req.user = null;
       next();
-    }
-    const token = req.headers.authorization.split(' ')[1];
-    try {
-      const user = await this.userService.loadUserByToken(token);
-      if (!user) {
-        req.user = null;
+    } else {
+      const token = req.headers.authorization.split(' ')[1];
+      try {
+        const user = await this.userService.loadUserByToken(token);
+        if (!user) {
+          req.user = null;
+          next();
+        }
+        req.user = user;
         next();
+      } catch (err) {
+        req.user = null;
       }
-      req.user = user;
-      next();
-    } catch (err) {
-      req.user = null;
     }
   }
 }
