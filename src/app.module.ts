@@ -7,6 +7,7 @@ import config from './config/ormconfig';
 import { UserModule } from './modules/user/user.module';
 import { AuthMiddleWare } from './modules/user/middleware/auth-middleware';
 import { ArticleModule } from './modules/article/article.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ArticleModule } from './modules/article/article.module';
     TagModule,
     UserModule,
     ArticleModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -52,6 +54,10 @@ export class AppModule {
       {
         path: 'articles/:slug/favorite',
         method: RequestMethod.DELETE,
+      },
+      {
+        path: 'profiles/:username',
+        method: RequestMethod.GET,
       },
     );
   }
