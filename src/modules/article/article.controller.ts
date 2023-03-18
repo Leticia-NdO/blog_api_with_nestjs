@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,11 +15,20 @@ import { User } from '../user/decorators/user.decorator';
 import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
 import { PersistArticleDto } from './dto/persist-article.dto';
+import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
 import { ArticleResponseInterface } from './types/article-response.interface';
 
 @Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
+
+  @Get()
+  async findAl(
+    @User('id') userId: number,
+    @Query() queries: any,
+  ): Promise<ArticleBulkResponseInterface> {
+    return await this.articleService.findAll(userId, queries);
+  }
 
   @Post()
   @UsePipes(new ValidationPipe())
@@ -64,4 +74,27 @@ export class ArticleController {
     );
     return this.articleService.buildArticleResponse(articleEntity);
   }
+
+  @Post(':slug/favorite')
+  async likeArticle(
+    @Param('slug') slug: string,
+    @User('id') userId: number,
+  ): Promise<ArticleResponseInterface> {
+    const articleEntity = await this.articleService.likeArticle(userId, slug);
+
+    return this.articleService.buildArticleResponse(articleEntity);
+  }
+
+  // @Delete(':slug/favorite')
+  // async dislikeArticle(
+  //   @Param('slug') slug: string,
+  //   @User('id') userId: number,
+  // ): Promise<ArticleResponseInterface> {
+  //   const articleEntity = await this.articleService.dislikeArticle(
+  //     userId,
+  //     slug,
+  //   );
+
+  //   return this.articleService.buildArticleResponse(articleEntity);
+  // }
 }

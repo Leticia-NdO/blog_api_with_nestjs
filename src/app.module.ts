@@ -31,7 +31,7 @@ export class AppModule {
       },
       {
         path: 'articles',
-        method: RequestMethod.ALL,
+        method: RequestMethod.POST,
       },
       {
         path: 'articles/:slug',
@@ -40,6 +40,10 @@ export class AppModule {
       {
         path: 'articles/:slug',
         method: RequestMethod.PUT,
+      },
+      {
+        path: 'articles/:slug/favorite',
+        method: RequestMethod.POST,
       },
     );
   }

@@ -1,18 +1,59 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { ArticleEntity } from './article.entity';
 import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleResponseInterface } from './types/article-response.interface';
 import slugify from 'slugify';
+import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    private dataSource: DataSource,
   ) {}
+
+  async findAll(
+    userId: number,
+    queries: any,
+  ): Promise<ArticleBulkResponseInterface> {
+    const queryBuilder = this.dataSource
+      .getRepository(ArticleEntity) // criando um repositório relacionado a tabela de articles
+      .createQueryBuilder('articles') // inicializando o queryBuilder e dando um alias pra tabela articles
+      .leftJoinAndSelect('articles.author', 'author'); // damos um left join na tabela de user por meio da propriedade author (usamos o alias escolhido na linha de cima) e damos o alias de author pra esse left join
+
+    queryBuilder.orderBy('articles.createdAt', 'DESC');
+
+    if (queries.tag) {
+      queryBuilder.andWhere('articles.tagList LIKE :tag', {
+        tag: `%${queries.tag}%`,
+      });
+    }
+
+    if (queries.author) {
+      queryBuilder.andWhere('author.username = :username', {
+        username: queries.author,
+      });
+    }
+
+    const articlesCount = await queryBuilder.getCount();
+
+    if (queries.limit) {
+      queryBuilder.limit(queries.limit);
+    }
+
+    const articles = await queryBuilder.getMany();
+
+    return {
+      articles: articles,
+      articlesCount,
+    };
+  }
 
   async createArticle(
     author: UserEntity,
@@ -71,7 +112,7 @@ export class ArticleService {
       {
         id: article.id,
       },
-      updateArticleDto.title
+      updateArticleDto.title // if the title is to be updated the slug needs to be too
         ? {
             ...updateArticleDto,
             slug: this.getSlug(updateArticleDto.title),
@@ -86,6 +127,47 @@ export class ArticleService {
     });
 
     return updatedArticle;
+  }
+
+  async likeArticle(userId: number, slug: string): Promise<ArticleEntity> {
+    const article = await this.loadArticleBySlug(slug);
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['favorites'],
+    });
+
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
+
+    const isFavorited =
+      user.favorites.findIndex(
+        (articleInFavorites) => articleInFavorites.id === article.id,
+      ) !== -1;
+
+    console.log(user);
+
+    if (!isFavorited) {
+      user.favorites.push(article);
+      article.favorites++;
+      await this.userRepository.save(user);
+      await this.articleRepository.save(article);
+    }
+
+    return article;
+  }
+
+  async dislikeArticle(userId: number, slug: string): Promise<ArticleEntity> {
+    const article = await this.loadArticleBySlug(slug);
+
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
+
+    if (article.author.id !== userId)
+      throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
+
+    return article;
   }
 
   buildArticleResponse(articleEntity: ArticleEntity): ArticleResponseInterface {
