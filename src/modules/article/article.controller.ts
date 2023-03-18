@@ -30,8 +30,15 @@ export class ArticleController {
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    console.log(userId);
     return await this.articleService.findAll(userId, queries);
+  }
+
+  @Get('my-articles')
+  async getOwnArticles(
+    @User('id') userId: number,
+    @Query() queries: ArticleQueries,
+  ): Promise<ArticleBulkResponseInterface> {
+    return await this.articleService.getOwnArticles(userId, queries);
   }
 
   @Get('feed')
