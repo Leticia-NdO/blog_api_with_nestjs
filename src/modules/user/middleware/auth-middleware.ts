@@ -13,6 +13,7 @@ export class AuthMiddleWare implements NestMiddleware {
       next();
     } else {
       const token = req.headers.authorization.split(' ')[1];
+
       try {
         const user = await this.userService.loadUserByToken(token);
         if (!user) {

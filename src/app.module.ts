@@ -22,51 +22,9 @@ import { ProfileModule } from './modules/profile/profile.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleWare).forRoutes(
-      {
-        path: 'users',
-        method: RequestMethod.GET,
-      },
-      {
-        path: 'users',
-        method: RequestMethod.PUT,
-      },
-      {
-        path: 'articles',
-        method: RequestMethod.POST,
-      },
-      {
-        path: 'articles',
-        method: RequestMethod.GET,
-      },
-      {
-        path: 'articles/:slug',
-        method: RequestMethod.DELETE,
-      },
-      {
-        path: 'articles/:slug',
-        method: RequestMethod.PUT,
-      },
-      {
-        path: 'articles/:slug/favorite',
-        method: RequestMethod.POST,
-      },
-      {
-        path: 'articles/:slug/favorite',
-        method: RequestMethod.DELETE,
-      },
-      {
-        path: 'profiles/:username',
-        method: RequestMethod.GET,
-      },
-      {
-        path: 'profiles/:username/follow',
-        method: RequestMethod.POST,
-      },
-      {
-        path: 'profiles/:username/follow',
-        method: RequestMethod.DELETE,
-      },
-    );
+    consumer.apply(AuthMiddleWare).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
   }
 }
