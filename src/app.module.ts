@@ -37,6 +37,10 @@ export class AppModule {
         path: 'articles/:slug',
         method: RequestMethod.DELETE,
       },
+      {
+        path: 'articles/:slug',
+        method: RequestMethod.PUT,
+      },
     );
   }
 }

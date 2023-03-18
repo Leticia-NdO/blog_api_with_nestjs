@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { ArticleEntity } from './article.entity';
-import { CreateArticleDto } from './dto/create-article.dto';
+import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleResponseInterface } from './types/article-response.interface';
 import slugify from 'slugify';
 
@@ -16,7 +16,7 @@ export class ArticleService {
 
   async createArticle(
     author: UserEntity,
-    createArticleDto: CreateArticleDto,
+    createArticleDto: PersistArticleDto,
   ): Promise<ArticleEntity> {
     const article = new ArticleEntity();
     Object.assign(article, createArticleDto);
@@ -32,6 +32,9 @@ export class ArticleService {
         slug,
       },
     });
+
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
 
     return article;
   }
@@ -49,6 +52,40 @@ export class ArticleService {
       throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
 
     return await this.articleRepository.delete(article.id);
+  }
+
+  async updateArticleBySlug(
+    userId: number,
+    slug: string,
+    updateArticleDto: PersistArticleDto,
+  ): Promise<ArticleEntity> {
+    const article = await this.loadArticleBySlug(slug);
+
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
+
+    if (article.author.id !== userId)
+      throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
+
+    await this.articleRepository.update(
+      {
+        id: article.id,
+      },
+      updateArticleDto.title
+        ? {
+            ...updateArticleDto,
+            slug: this.getSlug(updateArticleDto.title),
+          }
+        : updateArticleDto,
+    );
+
+    const updatedArticle = await this.articleRepository.findOne({
+      where: {
+        id: article.id,
+      },
+    });
+
+    return updatedArticle;
   }
 
   buildArticleResponse(articleEntity: ArticleEntity): ArticleResponseInterface {
