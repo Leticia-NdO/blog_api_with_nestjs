@@ -7,7 +7,6 @@ import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleResponseInterface } from './types/article-response.interface';
 import slugify from 'slugify';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
-import { query } from 'express';
 import { ArticleQueries } from './types/article-queries.interface';
 
 @Injectable()
