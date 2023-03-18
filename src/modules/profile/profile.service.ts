@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { FollowEntity } from './follow.entity';
+import { ProfileBulkResponseInterface } from './types/profile-bulk-response.interface';
 import { ProfileResponseInterface } from './types/profile-response.interface';
 import { Profile } from './types/profile.interface';
 
@@ -35,6 +36,24 @@ export class ProfileService {
       ...profile,
       following: !!follow,
     };
+  }
+
+  async getFollowings(userId: number): Promise<UserEntity[]> {
+    const follow = await this.followRepository.find({
+      where: {
+        followerId: userId,
+      },
+    });
+
+    const followingIds = follow.map((foll) => foll.followingId);
+
+    const profiles = await this.userRepository.find({
+      where: {
+        id: In(followingIds),
+      },
+    });
+
+    return profiles;
   }
 
   async followProfile(username: string, userId: number): Promise<Profile> {
@@ -108,6 +127,15 @@ export class ProfileService {
     delete profile.email;
     return {
       profile,
+    };
+  }
+
+  buildProfileBulkResponse(
+    followings: UserEntity[],
+  ): ProfileBulkResponseInterface {
+    followings.forEach((prof) => delete prof.email);
+    return {
+      profiles: followings,
     };
   }
 }
