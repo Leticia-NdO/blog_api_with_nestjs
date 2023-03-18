@@ -34,6 +34,10 @@ export class AppModule {
         method: RequestMethod.POST,
       },
       {
+        path: 'articles',
+        method: RequestMethod.GET,
+      },
+      {
         path: 'articles/:slug',
         method: RequestMethod.DELETE,
       },

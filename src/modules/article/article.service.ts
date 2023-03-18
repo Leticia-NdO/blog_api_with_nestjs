@@ -7,6 +7,8 @@ import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleResponseInterface } from './types/article-response.interface';
 import slugify from 'slugify';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
+import { query } from 'express';
+import { ArticleQueries } from './types/article-queries.interface';
 
 @Injectable()
 export class ArticleService {
@@ -20,7 +22,7 @@ export class ArticleService {
 
   async findAll(
     userId: number,
-    queries: any,
+    queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
     const queryBuilder = this.dataSource
       .getRepository(ArticleEntity) // criando um repositório relacionado a tabela de articles
@@ -31,6 +33,7 @@ export class ArticleService {
 
     if (queries.tag) {
       queryBuilder.andWhere('articles.tagList LIKE :tag', {
+        // each "andWhere" adds another condition to the queryBuilder
         tag: `%${queries.tag}%`,
       });
     }
@@ -41,16 +44,61 @@ export class ArticleService {
       });
     }
 
+    if (queries.favorited) {
+      // here we're gonna find all the favorites articles of a given user
+      const author = await this.userRepository.findOne({
+        where: {
+          username: queries.favorited,
+        },
+        relations: ['favorites'],
+      });
+
+      const favoritedArticlesIds = author.favorites.map(
+        (favoritedArticle) => favoritedArticle.id,
+      );
+      if (favoritedArticlesIds.length > 0) {
+        queryBuilder.andWhere('articles.id IN (:...ids)', {
+          ids: favoritedArticlesIds,
+        });
+      } else {
+        queryBuilder.andWhere('1=0');
+      }
+    }
+
     const articlesCount = await queryBuilder.getCount();
 
     if (queries.limit) {
       queryBuilder.limit(queries.limit);
     }
 
+    let favoriteIds: number[] = [];
+
+    if (userId) {
+      // if the user is logged in we're gonna find all of it's favorite articles's ids
+      const currentUser = await this.userRepository.findOne({
+        where: {
+          id: userId,
+        },
+        relations: ['favorites'],
+      });
+
+      favoriteIds = currentUser.favorites.map(
+        (favoritedArticle) => favoritedArticle.id,
+      );
+    }
+
     const articles = await queryBuilder.getMany();
+    const articleWithFavorited = articles.map((article) => {
+      // we modifiy the articles including favorited property based on if the articles id is in favorite articles's ids of the logged user
+      const isFavorited = favoriteIds.includes(article.id);
+      return {
+        ...article,
+        favorited: isFavorited,
+      };
+    });
 
     return {
-      articles: articles,
+      articles: articleWithFavorited,
       articlesCount,
     };
   }
@@ -146,8 +194,6 @@ export class ArticleService {
         (articleInFavorites) => articleInFavorites.id === article.id,
       ) !== -1;
 
-    console.log(user);
-
     if (!isFavorited) {
       user.favorites.push(article);
       article.favorites++;
@@ -173,8 +219,6 @@ export class ArticleService {
     const articleFavoriteIndex = user.favorites.findIndex(
       (articleInFavorites) => articleInFavorites.id === article.id,
     );
-
-    console.log(user);
 
     if (articleFavoriteIndex >= 0) {
       user.favorites.splice(articleFavoriteIndex, 1);

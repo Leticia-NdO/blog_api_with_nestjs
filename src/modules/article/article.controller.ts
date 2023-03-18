@@ -8,14 +8,17 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from '../user/decorators/user.decorator';
+import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
 import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
+import { ArticleQueries } from './types/article-queries.interface';
 import { ArticleResponseInterface } from './types/article-response.interface';
 
 @Controller('articles')
@@ -23,15 +26,16 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Get()
-  async findAl(
+  async findAll(
     @User('id') userId: number,
-    @Query() queries: any,
+    @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
     return await this.articleService.findAll(userId, queries);
   }
 
   @Post()
   @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard)
   async createArticle(
     @User() author: UserEntity,
     @Body('article') persistArticleDto: PersistArticleDto,
@@ -54,6 +58,7 @@ export class ArticleController {
 
   @Delete(':slug')
   @HttpCode(204)
+  @UseGuards(AuthGuard)
   async deleteArticleBySlug(
     @Param('slug') slug: string,
     @User('id') userId: number,
@@ -62,6 +67,7 @@ export class ArticleController {
   }
 
   @Put(':slug')
+  @UseGuards(AuthGuard)
   async updateArticleBySlug(
     @Param('slug') slug: string,
     @User('id') userId: number,
@@ -76,6 +82,7 @@ export class ArticleController {
   }
 
   @Post(':slug/favorite')
+  @UseGuards(AuthGuard)
   async likeArticle(
     @Param('slug') slug: string,
     @User('id') userId: number,
@@ -86,6 +93,7 @@ export class ArticleController {
   }
 
   @Delete(':slug/favorite')
+  @UseGuards(AuthGuard)
   async dislikeArticle(
     @Param('slug') slug: string,
     @User('id') userId: number,

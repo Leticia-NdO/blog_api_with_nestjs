@@ -12,6 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from './decorators/user.decorator';
+import { AuthGuard } from './guards/auth.guard';
 import { IllegalPasswordAlteration } from './guards/illegal-password-alteration.guard';
 import { UserResponse } from './types/user-response.interface';
 import { UserService } from './user.service';
@@ -38,6 +39,7 @@ export class UserController {
 
   @Get()
   @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard)
   currentUser(@User() user: any): UserResponse {
     return this.userService.buildUserResponse(user);
   }
@@ -45,6 +47,7 @@ export class UserController {
   @Put()
   @UsePipes(new ValidationPipe())
   @UseGuards(IllegalPasswordAlteration)
+  @UseGuards(AuthGuard)
   async updateUser(
     @Body('user') updateUserDto: UpdateUserDto,
     @User('id') id: number,
