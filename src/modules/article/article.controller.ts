@@ -16,6 +16,8 @@ import { User } from '../user/decorators/user.decorator';
 import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
+import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
+import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
 import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
 import { ArticleQueries } from './types/article-queries.interface';
@@ -23,14 +25,19 @@ import { ArticleResponseInterface } from './types/article-response.interface';
 
 @Controller('articles')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly listAllUseCase: ListAllArticlesUseCase,
+    private readonly listOwnArticlesUseCase: ListOwnArticlesUseCase,
+  ) {}
 
   @Get()
   async findAll(
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    return await this.articleService.findAll(userId, queries);
+    // return await this.articleService.findAll(userId, queries);
+    return await this.listAllUseCase.findAll(userId, queries);
   }
 
   @Get('my-articles')
@@ -38,7 +45,8 @@ export class ArticleController {
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    return await this.articleService.getOwnArticles(userId, queries);
+    //  return await this.articleService.getOwnArticles(userId, queries);
+    return await this.listOwnArticlesUseCase.findAll(userId, queries);
   }
 
   @Get('feed')

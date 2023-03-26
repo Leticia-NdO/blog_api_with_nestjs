@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { hash } from 'bcrypt';
-import { ArticleEntity } from '../article/article.entity';
+import { ArticleEntity } from '../article/core/domain/article.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
