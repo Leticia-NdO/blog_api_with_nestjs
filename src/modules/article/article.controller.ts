@@ -48,7 +48,7 @@ export class ArticleController {
     //  return await this.articleService.getOwnArticles(userId, queries);
     return await this.listOwnArticlesUseCase.findAll(userId, queries);
   }
-
+  // [x]
   @Get('feed')
   @UseGuards(AuthGuard)
   async getFeed(
@@ -58,6 +58,7 @@ export class ArticleController {
     return await this.articleService.getFeed(userId, queries);
   }
 
+  // [ ]
   @Post()
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
@@ -73,6 +74,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(articleEntity);
   }
 
+  // [ ]
   @Get(':slug')
   async getArticleBySlug(
     @Param('slug') slug: string,
@@ -81,6 +83,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(articleEntity);
   }
 
+  // [ ]
   @Delete(':slug')
   @HttpCode(204)
   @UseGuards(AuthGuard)
@@ -91,6 +94,7 @@ export class ArticleController {
     await this.articleService.deleteArticleBySlug(userId, slug);
   }
 
+  // [ ]
   @Put(':slug')
   @UseGuards(AuthGuard)
   async updateArticleBySlug(
@@ -106,6 +110,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(articleEntity);
   }
 
+  // [ ]
   @Post(':slug/favorite')
   @UseGuards(AuthGuard)
   async likeArticle(
@@ -117,6 +122,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(articleEntity);
   }
 
+  // [ ]
   @Delete(':slug/favorite')
   @UseGuards(AuthGuard)
   async dislikeArticle(

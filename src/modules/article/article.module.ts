@@ -11,6 +11,8 @@ import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { FindAllArticlesRepositoryInterface } from './core/domain/repository/article-find-all-repository';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
 import { FindOwnArticlesRepository } from './core/infra/db/typeorm/find-own-articles-repository';
+import { GetFeedUseCase } from './core/data/get-feed-use-case';
+import { GetFeedRepository } from './core/infra/db/typeorm/get-feed-repository';
 
 @Module({
   imports: [
@@ -36,6 +38,17 @@ import { FindOwnArticlesRepository } from './core/infra/db/typeorm/find-own-arti
       inject: [getDataSourceToken()],
     },
     {
+      provide: GetFeedRepository,
+      useFactory: (dataSource: DataSource) => {
+        return new GetFeedRepository(
+          dataSource.getRepository(UserEntity),
+          dataSource.getRepository(FollowEntity),
+          dataSource,
+        );
+      },
+      inject: [getDataSourceToken()],
+    },
+    {
       provide: ListAllArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListAllArticlesUseCase(findAllRepo);
@@ -48,6 +61,13 @@ import { FindOwnArticlesRepository } from './core/infra/db/typeorm/find-own-arti
         return new ListOwnArticlesUseCase(findAllRepo);
       },
       inject: [FindOwnArticlesRepository],
+    },
+    {
+      provide: GetFeedUseCase,
+      useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
+        return new GetFeedUseCase(findAllRepo);
+      },
+      inject: [GetFeedRepository],
     },
   ],
   controllers: [ArticleController],
