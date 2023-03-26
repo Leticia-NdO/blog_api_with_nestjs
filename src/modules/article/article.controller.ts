@@ -23,6 +23,7 @@ import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-u
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
 import { LoadArticleBySlugUseCase } from './core/data/load-article-by-slug-use-case';
+import { UpdateArticleBySlugUseCase } from './core/data/update-article-by-slug-use-case';
 import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
 import { ArticleQueries } from './types/article-queries.interface';
@@ -37,6 +38,7 @@ export class ArticleController {
     private readonly createArticleUseCase: CreateArticleUseCase,
     private readonly loadArticleBySlugUseCase: LoadArticleBySlugUseCase,
     private readonly deleteArticleBySlugUseCase: DeleteArticleBySlugUseCase,
+    private readonly updateArticleBySlugUseCase: UpdateArticleBySlugUseCase,
   ) {}
 
   @Get()
@@ -110,7 +112,7 @@ export class ArticleController {
     await this.deleteArticleBySlugUseCase.delete(slug);
   }
 
-  // [ ]
+  // [x]
   @Put(':slug')
   @UseGuards(AuthGuard)
   async updateArticleBySlug(
@@ -118,12 +120,13 @@ export class ArticleController {
     @User('id') userId: number,
     @Body('article') updateArticleDto: PersistArticleDto,
   ): Promise<ArticleResponseInterface> {
-    const articleEntity = await this.articleService.updateArticleBySlug(
-      userId,
-      slug,
-      updateArticleDto,
-    );
-    return this.articleService.buildArticleResponse(articleEntity);
+    const { article } = await this.loadArticleBySlugUseCase.load(slug);
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
+    if (article.author.id !== userId)
+      throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
+
+    return this.updateArticleBySlugUseCase.update(slug, updateArticleDto);
   }
 
   // [ ]
