@@ -20,6 +20,7 @@ import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
 import { CreateArticleUseCase } from './core/data/create-article-use-case';
 import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
+import { DislikeArticleUseCase } from './core/data/dislike-article-use-case';
 import { LikeArticleUseCase } from './core/data/like-article-use-case';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
@@ -41,6 +42,7 @@ export class ArticleController {
     private readonly deleteArticleBySlugUseCase: DeleteArticleBySlugUseCase,
     private readonly updateArticleBySlugUseCase: UpdateArticleBySlugUseCase,
     private readonly likeArticleUseCase: LikeArticleUseCase,
+    private readonly dislikeArticleUseCase: DislikeArticleUseCase,
   ) {}
 
   @Get()
@@ -152,11 +154,10 @@ export class ArticleController {
     @Param('slug') slug: string,
     @User('id') userId: number,
   ): Promise<ArticleResponseInterface> {
-    const articleEntity = await this.articleService.dislikeArticle(
-      userId,
-      slug,
-    );
+    const { article } = await this.loadArticleBySlugUseCase.load(slug);
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
 
-    return this.articleService.buildArticleResponse(articleEntity);
+    return this.dislikeArticleUseCase.like(slug, userId);
   }
 }

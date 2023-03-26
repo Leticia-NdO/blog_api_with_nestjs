@@ -28,6 +28,9 @@ import { UpdateOneArticleTypeormRepository } from './core/infra/db/typeorm/updat
 import { LikeArticleUseCase } from './core/data/like-article-use-case';
 import { LikeArticleRepositoryInterface } from './core/domain/repository/like-article-repository';
 import { LikeArticleTypeormRepository } from './core/infra/db/typeorm/like-article-typeorm-repository';
+import { DislikeArticleUseCase } from './core/data/dislike-article-use-case';
+import { DislikeArticleRepositoryInterface } from './core/domain/repository/dislike-article-repository';
+import { DislikeArticleTypeormRepository } from './core/infra/db/typeorm/dislike-article-typeorm-repository';
 
 @Module({
   imports: [
@@ -110,6 +113,16 @@ import { LikeArticleTypeormRepository } from './core/infra/db/typeorm/like-artic
       inject: [getDataSourceToken()],
     },
     {
+      provide: DislikeArticleTypeormRepository,
+      useFactory: (dataSource: DataSource) => {
+        return new DislikeArticleTypeormRepository(
+          dataSource.getRepository(UserEntity),
+          dataSource.getRepository(ArticleEntity),
+        );
+      },
+      inject: [getDataSourceToken()],
+    },
+    {
       provide: ListAllArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListAllArticlesUseCase(findAllRepo);
@@ -164,6 +177,13 @@ import { LikeArticleTypeormRepository } from './core/infra/db/typeorm/like-artic
         return new LikeArticleUseCase(likeRepo);
       },
       inject: [LikeArticleTypeormRepository],
+    },
+    {
+      provide: DislikeArticleUseCase,
+      useFactory: (dislikeRepo: DislikeArticleRepositoryInterface) => {
+        return new DislikeArticleUseCase(dislikeRepo);
+      },
+      inject: [DislikeArticleTypeormRepository],
     },
   ],
   controllers: [ArticleController],
