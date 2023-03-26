@@ -16,6 +16,7 @@ import { User } from '../user/decorators/user.decorator';
 import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
+import { CreateArticleUseCase } from './core/data/create-article-use-case';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
 import { PersistArticleDto } from './dto/persist-article.dto';
@@ -29,6 +30,7 @@ export class ArticleController {
     private readonly articleService: ArticleService,
     private readonly listAllUseCase: ListAllArticlesUseCase,
     private readonly listOwnArticlesUseCase: ListOwnArticlesUseCase,
+    private readonly createArticleUseCase: CreateArticleUseCase,
   ) {}
 
   @Get()
@@ -58,7 +60,7 @@ export class ArticleController {
     return await this.articleService.getFeed(userId, queries);
   }
 
-  // [ ]
+  // [x]
   @Post()
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
@@ -66,12 +68,12 @@ export class ArticleController {
     @User() author: UserEntity,
     @Body('article') persistArticleDto: PersistArticleDto,
   ): Promise<ArticleResponseInterface> {
-    const articleEntity = await this.articleService.createArticle(
+    const articleEntity = await this.createArticleUseCase.create(
       author,
       persistArticleDto,
     );
 
-    return this.articleService.buildArticleResponse(articleEntity);
+    return articleEntity;
   }
 
   // [ ]
