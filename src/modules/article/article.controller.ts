@@ -19,6 +19,7 @@ import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
 import { ArticleService } from './article.service';
 import { CreateArticleUseCase } from './core/data/create-article-use-case';
+import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
 import { LoadArticleBySlugUseCase } from './core/data/load-article-by-slug-use-case';
@@ -35,6 +36,7 @@ export class ArticleController {
     private readonly listOwnArticlesUseCase: ListOwnArticlesUseCase,
     private readonly createArticleUseCase: CreateArticleUseCase,
     private readonly loadArticleBySlugUseCase: LoadArticleBySlugUseCase,
+    private readonly deleteArticleBySlugUseCase: DeleteArticleBySlugUseCase,
   ) {}
 
   @Get()
@@ -80,7 +82,7 @@ export class ArticleController {
     return articleEntity;
   }
 
-  // [ ]
+  // [x]
   @Get(':slug')
   async getArticleBySlug(
     @Param('slug') slug: string,
@@ -92,7 +94,7 @@ export class ArticleController {
     return article;
   }
 
-  // [ ]
+  // [x]
   @Delete(':slug')
   @HttpCode(204)
   @UseGuards(AuthGuard)
@@ -100,7 +102,12 @@ export class ArticleController {
     @Param('slug') slug: string,
     @User('id') userId: number,
   ): Promise<void> {
-    await this.articleService.deleteArticleBySlug(userId, slug);
+    const { article } = await this.loadArticleBySlugUseCase.load(slug);
+    if (!article)
+      throw new HttpException('Article does not exists', HttpStatus.NOT_FOUND);
+    if (article.author.id !== userId)
+      throw new HttpException('Forbideen action', HttpStatus.FORBIDDEN);
+    await this.deleteArticleBySlugUseCase.delete(slug);
   }
 
   // [ ]

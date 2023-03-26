@@ -19,6 +19,9 @@ import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-a
 import { LoadArticleBySlugUseCase } from './core/data/load-article-by-slug-use-case';
 import { FindOneArticleRepositoryInterface } from './core/domain/repository/find-one-repository';
 import { FindOneArticleTypeormRepository } from './core/infra/db/typeorm/find-one-article-typeorm-repository';
+import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
+import { DeleteOneArticleRepositoryInterface } from './core/domain/repository/delete-one-repository';
+import { DeleteOneArticleTypeormRepository } from './core/infra/db/typeorm/delete-one-typeorm-repository';
 
 @Module({
   imports: [
@@ -73,6 +76,15 @@ import { FindOneArticleTypeormRepository } from './core/infra/db/typeorm/find-on
       inject: [getDataSourceToken()],
     },
     {
+      provide: DeleteOneArticleTypeormRepository,
+      useFactory: (dataSource: DataSource) => {
+        return new DeleteOneArticleTypeormRepository(
+          dataSource.getRepository(ArticleEntity),
+        );
+      },
+      inject: [getDataSourceToken()],
+    },
+    {
       provide: ListAllArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListAllArticlesUseCase(findAllRepo);
@@ -106,6 +118,13 @@ import { FindOneArticleTypeormRepository } from './core/infra/db/typeorm/find-on
         return new LoadArticleBySlugUseCase(loadRepo);
       },
       inject: [FindOneArticleTypeormRepository],
+    },
+    {
+      provide: DeleteArticleBySlugUseCase,
+      useFactory: (deleteRepo: DeleteOneArticleRepositoryInterface) => {
+        return new DeleteArticleBySlugUseCase(deleteRepo);
+      },
+      inject: [DeleteOneArticleTypeormRepository],
     },
   ],
   controllers: [ArticleController],
