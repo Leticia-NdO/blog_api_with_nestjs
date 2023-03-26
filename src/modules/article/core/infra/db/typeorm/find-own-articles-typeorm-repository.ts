@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
 import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository';
 
-export class FindOwnArticlesRepository
+export class FindOwnArticlesTypeormRepository
   implements FindAllArticlesRepositoryInterface
 {
   constructor(private dataSource: DataSource) {}

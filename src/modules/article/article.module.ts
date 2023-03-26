@@ -5,17 +5,17 @@ import { UserEntity } from '../user/user.entity';
 import { ArticleController } from './article.controller';
 import { ArticleEntity } from './core/domain/article.entity';
 import { ArticleService } from './article.service';
-import { FindAllArticlesRepository } from './core/infra/db/typeorm/article-typeorm-find-all-repository';
+import { FindAllArticlesTypeormRepository } from './core/infra/db/typeorm/article-find-all-typeorm-repository';
 import { DataSource } from 'typeorm';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { FindAllArticlesRepositoryInterface } from './core/domain/repository/article-find-all-repository';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
-import { FindOwnArticlesRepository } from './core/infra/db/typeorm/find-own-articles-repository';
+import { FindOwnArticlesTypeormRepository } from './core/infra/db/typeorm/find-own-articles-typeorm-repository';
 import { GetFeedUseCase } from './core/data/get-feed-use-case';
-import { GetFeedRepository } from './core/infra/db/typeorm/get-feed-repository';
+import { GetFeedTypeormRepository } from './core/infra/db/typeorm/get-feed-typeorm-repository';
 import { CreateArticleUseCase } from './core/data/create-article-use-case';
 import { CreateArticleRepositoryInterface } from './core/domain/repository/create-article-repository-interface';
-import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-article-repository';
+import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-article-typeorm-repository';
 
 @Module({
   imports: [
@@ -24,9 +24,9 @@ import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-a
   providers: [
     ArticleService,
     {
-      provide: FindAllArticlesRepository,
+      provide: FindAllArticlesTypeormRepository,
       useFactory: (dataSource: DataSource) => {
-        return new FindAllArticlesRepository(
+        return new FindAllArticlesTypeormRepository(
           dataSource.getRepository(UserEntity),
           dataSource,
         );
@@ -34,16 +34,16 @@ import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-a
       inject: [getDataSourceToken()],
     },
     {
-      provide: FindOwnArticlesRepository,
+      provide: FindOwnArticlesTypeormRepository,
       useFactory: (dataSource: DataSource) => {
-        return new FindOwnArticlesRepository(dataSource);
+        return new FindOwnArticlesTypeormRepository(dataSource);
       },
       inject: [getDataSourceToken()],
     },
     {
-      provide: GetFeedRepository,
+      provide: GetFeedTypeormRepository,
       useFactory: (dataSource: DataSource) => {
-        return new GetFeedRepository(
+        return new GetFeedTypeormRepository(
           dataSource.getRepository(UserEntity),
           dataSource.getRepository(FollowEntity),
           dataSource,
@@ -65,21 +65,21 @@ import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-a
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListAllArticlesUseCase(findAllRepo);
       },
-      inject: [FindAllArticlesRepository],
+      inject: [FindAllArticlesTypeormRepository],
     },
     {
       provide: ListOwnArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListOwnArticlesUseCase(findAllRepo);
       },
-      inject: [FindOwnArticlesRepository],
+      inject: [FindOwnArticlesTypeormRepository],
     },
     {
       provide: GetFeedUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new GetFeedUseCase(findAllRepo);
       },
-      inject: [GetFeedRepository],
+      inject: [GetFeedTypeormRepository],
     },
     {
       provide: CreateArticleUseCase,

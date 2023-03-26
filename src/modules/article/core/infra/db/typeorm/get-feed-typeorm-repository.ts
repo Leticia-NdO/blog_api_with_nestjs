@@ -6,7 +6,9 @@ import { DataSource, Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
 import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository';
 
-export class GetFeedRepository implements FindAllArticlesRepositoryInterface {
+export class GetFeedTypeormRepository
+  implements FindAllArticlesRepositoryInterface
+{
   constructor(
     private readonly userRepository: Repository<UserEntity>,
     private readonly followRepository: Repository<FollowEntity>,

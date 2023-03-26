@@ -5,7 +5,7 @@ import { ArticleBulkResponseInterface } from '@app/modules/article/types/article
 import { ArticleQueries } from '@app/modules/article/types/article-queries.interface';
 import { UserEntity } from '@app/modules/user/user.entity';
 
-export class FindAllArticlesRepository
+export class FindAllArticlesTypeormRepository
   implements FindAllArticlesRepositoryInterface
 {
   constructor(
