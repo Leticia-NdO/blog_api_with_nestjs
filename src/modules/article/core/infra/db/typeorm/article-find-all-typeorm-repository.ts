@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository';
+import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository-interface';
 import { ArticleEntity } from '../../../domain/article.entity';
 import { ArticleBulkResponseInterface } from '@app/modules/article/types/article-bulk-response.interface';
 import { ArticleQueries } from '@app/modules/article/types/article-queries.interface';

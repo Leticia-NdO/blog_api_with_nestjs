@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { DeleteOneArticleRepositoryInterface } from '../../../domain/repository/delete-one-repository';
+import { DeleteOneArticleRepositoryInterface } from '../../../domain/repository/delete-one-repository-interface';
 
 export class DeleteOneArticleTypeormRepository
   implements DeleteOneArticleRepositoryInterface

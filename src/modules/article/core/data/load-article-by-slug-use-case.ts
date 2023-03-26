@@ -1,5 +1,5 @@
 import { ArticleResponseInterface } from '../../types/article-response.interface';
-import { FindOneArticleRepositoryInterface } from '../domain/repository/find-one-repository';
+import { FindOneArticleRepositoryInterface } from '../domain/repository/find-one-repository-interface';
 import { buildArticleResponse } from './helpers/article-reponse-helper';
 
 export class LoadArticleBySlugUseCase {

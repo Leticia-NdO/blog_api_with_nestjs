@@ -1,7 +1,7 @@
 import { UserEntity } from '@app/modules/user/user.entity';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { LikeArticleRepositoryInterface } from '../../../domain/repository/like-article-repository';
+import { LikeArticleRepositoryInterface } from '../../../domain/repository/like-article-repository-interface';
 
 export class LikeArticleTypeormRepository
   implements LikeArticleRepositoryInterface

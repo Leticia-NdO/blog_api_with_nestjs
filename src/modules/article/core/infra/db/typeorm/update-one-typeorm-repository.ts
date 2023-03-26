@@ -1,7 +1,7 @@
 import { PersistArticleDto } from '@app/modules/article/dto/persist-article.dto';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { UpdateOneArticleRepositoryInterface } from '../../../domain/repository/update-one-repository';
+import { UpdateOneArticleRepositoryInterface } from '../../../domain/repository/update-one-repository-interface';
 import { getSlug } from '../../adapters/create-slug-adapter';
 
 export class UpdateOneArticleTypeormRepository

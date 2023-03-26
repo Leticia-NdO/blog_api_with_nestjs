@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { FindOneArticleRepositoryInterface } from '../../../domain/repository/find-one-repository';
+import { FindOneArticleRepositoryInterface } from '../../../domain/repository/find-one-repository-interface';
 
 export class FindOneArticleTypeormRepository
   implements FindOneArticleRepositoryInterface

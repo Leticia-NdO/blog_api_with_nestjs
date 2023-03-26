@@ -2,7 +2,7 @@ import { ArticleBulkResponseInterface } from '@app/modules/article/types/article
 import { ArticleQueries } from '@app/modules/article/types/article-queries.interface';
 import { DataSource } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository';
+import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository-interface';
 
 export class FindOwnArticlesTypeormRepository
   implements FindAllArticlesRepositoryInterface

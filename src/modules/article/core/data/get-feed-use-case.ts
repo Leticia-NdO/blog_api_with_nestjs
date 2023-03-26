@@ -1,6 +1,6 @@
 import { ArticleBulkResponseInterface } from '../../types/article-bulk-response.interface';
 import { ArticleQueries } from '../../types/article-queries.interface';
-import { FindAllArticlesRepositoryInterface } from '../domain/repository/article-find-all-repository';
+import { FindAllArticlesRepositoryInterface } from '../domain/repository/article-find-all-repository-interface';
 
 export class GetFeedUseCase {
   constructor(

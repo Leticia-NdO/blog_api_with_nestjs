@@ -1,6 +1,6 @@
 import { PersistArticleDto } from '../../dto/persist-article.dto';
 import { ArticleResponseInterface } from '../../types/article-response.interface';
-import { UpdateOneArticleRepositoryInterface } from '../domain/repository/update-one-repository';
+import { UpdateOneArticleRepositoryInterface } from '../domain/repository/update-one-repository-interface';
 import { buildArticleResponse } from './helpers/article-reponse-helper';
 
 export class UpdateArticleBySlugUseCase {

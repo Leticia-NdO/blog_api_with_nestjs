@@ -1,7 +1,7 @@
 import { UserEntity } from '@app/modules/user/user.entity';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { DislikeArticleRepositoryInterface } from '../../../domain/repository/dislike-article-repository';
+import { DislikeArticleRepositoryInterface } from '../../../domain/repository/dislike-article-repository-interface';
 
 export class DislikeArticleTypeormRepository
   implements DislikeArticleRepositoryInterface

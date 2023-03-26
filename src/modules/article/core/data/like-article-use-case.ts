@@ -1,5 +1,5 @@
 import { ArticleResponseInterface } from '../../types/article-response.interface';
-import { LikeArticleRepositoryInterface } from '../domain/repository/like-article-repository';
+import { LikeArticleRepositoryInterface } from '../domain/repository/like-article-repository-interface';
 import { buildArticleResponse } from './helpers/article-reponse-helper';
 
 export class LikeArticleUseCase {

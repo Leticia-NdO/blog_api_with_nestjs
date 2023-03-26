@@ -4,7 +4,7 @@ import { FollowEntity } from '@app/modules/profile/follow.entity';
 import { UserEntity } from '@app/modules/user/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository';
+import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository-interface';
 
 export class GetFeedTypeormRepository
   implements FindAllArticlesRepositoryInterface
