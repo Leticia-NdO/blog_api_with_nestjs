@@ -25,6 +25,9 @@ import { DeleteOneArticleTypeormRepository } from './core/infra/db/typeorm/delet
 import { UpdateArticleBySlugUseCase } from './core/data/update-article-by-slug-use-case';
 import { UpdateOneArticleRepositoryInterface } from './core/domain/repository/update-one-repository';
 import { UpdateOneArticleTypeormRepository } from './core/infra/db/typeorm/update-one-typeorm-repository';
+import { LikeArticleUseCase } from './core/data/like-article-use-case';
+import { LikeArticleRepositoryInterface } from './core/domain/repository/like-article-repository';
+import { LikeArticleTypeormRepository } from './core/infra/db/typeorm/like-article-typeorm-repository';
 
 @Module({
   imports: [
@@ -97,6 +100,16 @@ import { UpdateOneArticleTypeormRepository } from './core/infra/db/typeorm/updat
       inject: [getDataSourceToken()],
     },
     {
+      provide: LikeArticleTypeormRepository,
+      useFactory: (dataSource: DataSource) => {
+        return new LikeArticleTypeormRepository(
+          dataSource.getRepository(UserEntity),
+          dataSource.getRepository(ArticleEntity),
+        );
+      },
+      inject: [getDataSourceToken()],
+    },
+    {
       provide: ListAllArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
         return new ListAllArticlesUseCase(findAllRepo);
@@ -144,6 +157,13 @@ import { UpdateOneArticleTypeormRepository } from './core/infra/db/typeorm/updat
         return new UpdateArticleBySlugUseCase(updateRepo);
       },
       inject: [UpdateOneArticleTypeormRepository],
+    },
+    {
+      provide: LikeArticleUseCase,
+      useFactory: (likeRepo: LikeArticleRepositoryInterface) => {
+        return new LikeArticleUseCase(likeRepo);
+      },
+      inject: [LikeArticleTypeormRepository],
     },
   ],
   controllers: [ArticleController],
