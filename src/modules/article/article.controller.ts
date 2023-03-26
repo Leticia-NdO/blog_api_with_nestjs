@@ -17,10 +17,10 @@ import {
 import { User } from '../user/decorators/user.decorator';
 import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
-import { ArticleService } from './article.service';
 import { CreateArticleUseCase } from './core/data/create-article-use-case';
 import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
 import { DislikeArticleUseCase } from './core/data/dislike-article-use-case';
+import { GetFeedUseCase } from './core/data/get-feed-use-case';
 import { LikeArticleUseCase } from './core/data/like-article-use-case';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
 import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
@@ -34,9 +34,9 @@ import { ArticleResponseInterface } from './types/article-response.interface';
 @Controller('articles')
 export class ArticleController {
   constructor(
-    private readonly articleService: ArticleService,
     private readonly listAllUseCase: ListAllArticlesUseCase,
     private readonly listOwnArticlesUseCase: ListOwnArticlesUseCase,
+    private readonly getFeedUseCase: GetFeedUseCase,
     private readonly createArticleUseCase: CreateArticleUseCase,
     private readonly loadArticleBySlugUseCase: LoadArticleBySlugUseCase,
     private readonly deleteArticleBySlugUseCase: DeleteArticleBySlugUseCase,
@@ -50,7 +50,6 @@ export class ArticleController {
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    // return await this.articleService.findAll(userId, queries);
     return await this.listAllUseCase.findAll(userId, queries);
   }
 
@@ -59,7 +58,6 @@ export class ArticleController {
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    //  return await this.articleService.getOwnArticles(userId, queries);
     return await this.listOwnArticlesUseCase.findAll(userId, queries);
   }
   // [x]
@@ -69,7 +67,7 @@ export class ArticleController {
     @User('id') userId: number,
     @Query() queries: ArticleQueries,
   ): Promise<ArticleBulkResponseInterface> {
-    return await this.articleService.getFeed(userId, queries);
+    return await this.getFeedUseCase.findAll(userId, queries);
   }
 
   // [x]
@@ -147,7 +145,7 @@ export class ArticleController {
     return this.likeArticleUseCase.like(slug, userId);
   }
 
-  // [ ]
+  // [x]
   @Delete(':slug/favorite')
   @UseGuards(AuthGuard)
   async dislikeArticle(

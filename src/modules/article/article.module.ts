@@ -4,7 +4,6 @@ import { FollowEntity } from '../profile/follow.entity';
 import { UserEntity } from '../user/user.entity';
 import { ArticleController } from './article.controller';
 import { ArticleEntity } from './core/domain/article.entity';
-import { ArticleService } from './article.service';
 import { FindAllArticlesTypeormRepository } from './core/infra/db/typeorm/article-find-all-typeorm-repository';
 import { DataSource } from 'typeorm';
 import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
@@ -37,7 +36,6 @@ import { DislikeArticleTypeormRepository } from './core/infra/db/typeorm/dislike
     TypeOrmModule.forFeature([ArticleEntity, UserEntity, FollowEntity]),
   ],
   providers: [
-    ArticleService,
     {
       provide: FindAllArticlesTypeormRepository,
       useFactory: (dataSource: DataSource) => {
