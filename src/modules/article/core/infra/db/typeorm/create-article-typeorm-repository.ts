@@ -2,7 +2,7 @@ import { PersistArticleDto } from '@app/modules/article/dto/persist-article.dto'
 import { UserEntity } from '@app/modules/user/user.entity';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '../../../domain/article.entity';
-import { CreateArticleRepositoryInterface } from '../../../domain/repository/create-article-repository-interface';
+import { CreateArticleRepositoryInterface } from '../../../domain/repository/create-article-repository';
 import { getSlug } from '../../adapters/create-slug-adapter';
 
 export class CreateArticleTypeormRepository

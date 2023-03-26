@@ -17,15 +17,18 @@ import {
 import { User } from '../user/decorators/user.decorator';
 import { AuthGuard } from '../user/guards/auth.guard';
 import { UserEntity } from '../user/user.entity';
-import { CreateArticleUseCase } from './core/data/create-article-use-case';
-import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
-import { DislikeArticleUseCase } from './core/data/dislike-article-use-case';
-import { GetFeedUseCase } from './core/data/get-feed-use-case';
-import { LikeArticleUseCase } from './core/data/like-article-use-case';
-import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
-import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
-import { LoadArticleBySlugUseCase } from './core/data/load-article-by-slug-use-case';
-import { UpdateArticleBySlugUseCase } from './core/data/update-article-by-slug-use-case';
+import {
+  CreateArticleUseCase,
+  DeleteArticleBySlugUseCase,
+  DislikeArticleUseCase,
+  GetFeedUseCase,
+  LikeArticleUseCase,
+  ListAllArticlesUseCase,
+  ListOwnArticlesUseCase,
+  LoadArticleBySlugUseCase,
+  UpdateArticleBySlugUseCase,
+} from './core/data';
+
 import { PersistArticleDto } from './dto/persist-article.dto';
 import { ArticleBulkResponseInterface } from './types/article-bulk-response.interface';
 import { ArticleQueries } from './types/article-queries.interface';
@@ -60,7 +63,7 @@ export class ArticleController {
   ): Promise<ArticleBulkResponseInterface> {
     return await this.listOwnArticlesUseCase.findAll(userId, queries);
   }
-  // [x]
+
   @Get('feed')
   @UseGuards(AuthGuard)
   async getFeed(
@@ -70,7 +73,6 @@ export class ArticleController {
     return await this.getFeedUseCase.findAll(userId, queries);
   }
 
-  // [x]
   @Post()
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
@@ -86,7 +88,6 @@ export class ArticleController {
     return articleEntity;
   }
 
-  // [x]
   @Get(':slug')
   async getArticleBySlug(
     @Param('slug') slug: string,
@@ -98,7 +99,6 @@ export class ArticleController {
     return article;
   }
 
-  // [x]
   @Delete(':slug')
   @HttpCode(204)
   @UseGuards(AuthGuard)
@@ -114,7 +114,6 @@ export class ArticleController {
     await this.deleteArticleBySlugUseCase.delete(slug);
   }
 
-  // [x]
   @Put(':slug')
   @UseGuards(AuthGuard)
   async updateArticleBySlug(
@@ -131,7 +130,6 @@ export class ArticleController {
     return this.updateArticleBySlugUseCase.update(slug, updateArticleDto);
   }
 
-  // [x]
   @Post(':slug/favorite')
   @UseGuards(AuthGuard)
   async likeArticle(
@@ -145,7 +143,6 @@ export class ArticleController {
     return this.likeArticleUseCase.like(slug, userId);
   }
 
-  // [x]
   @Delete(':slug/favorite')
   @UseGuards(AuthGuard)
   async dislikeArticle(

@@ -4,32 +4,44 @@ import { FollowEntity } from '../profile/follow.entity';
 import { UserEntity } from '../user/user.entity';
 import { ArticleController } from './article.controller';
 import { ArticleEntity } from './core/domain/article.entity';
-import { FindAllArticlesTypeormRepository } from './core/infra/db/typeorm/article-find-all-typeorm-repository';
 import { DataSource } from 'typeorm';
-import { ListAllArticlesUseCase } from './core/data/list-all-by-user-use-case';
-import { FindAllArticlesRepositoryInterface } from './core/domain/repository/article-find-all-repository';
-import { ListOwnArticlesUseCase } from './core/data/list-own-articles-use-case';
-import { FindOwnArticlesTypeormRepository } from './core/infra/db/typeorm/find-own-articles-typeorm-repository';
-import { GetFeedUseCase } from './core/data/get-feed-use-case';
-import { GetFeedTypeormRepository } from './core/infra/db/typeorm/get-feed-typeorm-repository';
-import { CreateArticleUseCase } from './core/data/create-article-use-case';
-import { CreateArticleRepositoryInterface } from './core/domain/repository/create-article-repository-interface';
-import { CreateArticleTypeormRepository } from './core/infra/db/typeorm/create-article-typeorm-repository';
-import { LoadArticleBySlugUseCase } from './core/data/load-article-by-slug-use-case';
-import { FindOneArticleRepositoryInterface } from './core/domain/repository/find-one-repository';
-import { FindOneArticleTypeormRepository } from './core/infra/db/typeorm/find-one-article-typeorm-repository';
-import { DeleteArticleBySlugUseCase } from './core/data/delete-article-by-slug-use-case';
-import { DeleteOneArticleRepositoryInterface } from './core/domain/repository/delete-one-repository';
-import { DeleteOneArticleTypeormRepository } from './core/infra/db/typeorm/delete-one-typeorm-repository';
-import { UpdateArticleBySlugUseCase } from './core/data/update-article-by-slug-use-case';
-import { UpdateOneArticleRepositoryInterface } from './core/domain/repository/update-one-repository';
-import { UpdateOneArticleTypeormRepository } from './core/infra/db/typeorm/update-one-typeorm-repository';
-import { LikeArticleUseCase } from './core/data/like-article-use-case';
-import { LikeArticleRepositoryInterface } from './core/domain/repository/like-article-repository';
-import { LikeArticleTypeormRepository } from './core/infra/db/typeorm/like-article-typeorm-repository';
-import { DislikeArticleUseCase } from './core/data/dislike-article-use-case';
-import { DislikeArticleRepositoryInterface } from './core/domain/repository/dislike-article-repository';
-import { DislikeArticleTypeormRepository } from './core/infra/db/typeorm/dislike-article-typeorm-repository';
+
+// repository interfaces
+import {
+  FindAllArticlesRepositoryInterface,
+  CreateArticleRepositoryInterface,
+  FindOneArticleRepositoryInterface,
+  DeleteOneArticleRepositoryInterface,
+  UpdateOneArticleRepositoryInterface,
+  LikeArticleRepositoryInterface,
+  DislikeArticleRepositoryInterface,
+} from './core/domain/repository';
+
+// repository implementations
+import {
+  FindOneArticleTypeormRepository,
+  CreateArticleTypeormRepository,
+  GetFeedTypeormRepository,
+  FindOwnArticlesTypeormRepository,
+  DeleteOneArticleTypeormRepository,
+  UpdateOneArticleTypeormRepository,
+  LikeArticleTypeormRepository,
+  FindAllArticlesTypeormRepository,
+  DislikeArticleTypeormRepository,
+} from './core/infra/db/typeorm';
+
+// use-cases
+import {
+  CreateArticleUseCase,
+  DeleteArticleBySlugUseCase,
+  DislikeArticleUseCase,
+  GetFeedUseCase,
+  LikeArticleUseCase,
+  ListAllArticlesUseCase,
+  ListOwnArticlesUseCase,
+  LoadArticleBySlugUseCase,
+  UpdateArticleBySlugUseCase,
+} from './core/data';
 
 @Module({
   imports: [

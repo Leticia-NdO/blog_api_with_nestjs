@@ -1,7 +1,7 @@
 import { UserEntity } from '@app/modules/user/user.entity';
 import { PersistArticleDto } from '../../dto/persist-article.dto';
 import { ArticleResponseInterface } from '../../types/article-response.interface';
-import { CreateArticleRepositoryInterface } from '../domain/repository/create-article-repository-interface';
+import { CreateArticleRepositoryInterface } from '../domain/repository/create-article-repository';
 import { buildArticleResponse } from './helpers/article-reponse-helper';
 
 export class CreateArticleUseCase {
