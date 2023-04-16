@@ -21,6 +21,11 @@ services:
     depends_on:
       - db
     restart: always
+    environment:
+      - MYSQL_PORT=8000
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=mediumclone
     volumes:
       - ./tsconfig.json/:/usr/app/blog_nestjs/tsconfig.json
       - ./tsconfig.build.json/:/usr/app/blog_nestjs/tsconfig.build.json    

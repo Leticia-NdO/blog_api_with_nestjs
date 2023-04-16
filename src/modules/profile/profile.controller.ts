@@ -21,7 +21,7 @@ export class ProfileController {
   async getFollowings(
     @User('id') userId: number,
   ): Promise<ProfileBulkResponseInterface> {
-    console.log(userId);
+    // Return all user's followers
     const profile = await this.profileService.getFollowings(userId);
     return this.profileService.buildProfileBulkResponse(profile);
   }
@@ -31,6 +31,7 @@ export class ProfileController {
     @Param('username') username: string,
     @User('id') userId: number,
   ): Promise<ProfileResponseInterface> {
+    // Return user's profile
     const profile = await this.profileService.getProfile(username, userId);
     return this.profileService.buildProfileResponse(profile);
   }
@@ -41,6 +42,7 @@ export class ProfileController {
     @Param('username') username: string,
     @User('id') userId: number,
   ): Promise<ProfileResponseInterface> {
+    // Follow another profile
     const profile = await this.profileService.followProfile(username, userId);
     return this.profileService.buildProfileResponse(profile);
   }
@@ -51,6 +53,7 @@ export class ProfileController {
     @Param('username') username: string,
     @User('id') userId: number,
   ): Promise<ProfileResponseInterface> {
+    // Unfollow another profile
     const profile = await this.profileService.unfollowProfile(username, userId);
     return this.profileService.buildProfileResponse(profile);
   }
