@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=mediumclone
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_TCP_PORT=8000
+    ports:
+      - '8000:8000'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/create-database.sql:/docker-entrypoint-initdb.d/create-database.sql
+  api:
+    container_name: api-container
+    build: .
+    image: blog_nestjs
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - ./tsconfig.json/:/usr/app/blog_nestjs/tsconfig.json
+      - ./tsconfig.build.json/:/usr/app/blog_nestjs/tsconfig.build.json    
+      - ./package.json:/usr/app/blog_nestjs/package.json
+    command: bash -c "yarn build && yarn db:migrate:prod && yarn start:prod"
+    ports:
+      - "3000:3000"
+    links:
+      - db
+volumes:
+  db:
+    driver: local

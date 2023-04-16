@@ -5,13 +5,13 @@ export class CreateFollows1679164891366 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`follows\` CHANGE \`followinfId\` \`followingId\` int NOT NULL`,
+      `CREATE TABLE \`follows\` (\`id\` int NOT NULL AUTO_INCREMENT, \`followerId\` int NOT NULL, \`followingId\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`follows\` CHANGE \`followingId\` \`followinfId\` int NOT NULL`,
+      `DROP TABLE \`follows\``,
     );
   }
 }
