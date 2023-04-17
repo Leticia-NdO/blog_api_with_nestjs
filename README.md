@@ -8,47 +8,28 @@ The API includes several endpoints that allow users to perform various actions, 
 
 Overall, this RESTful API built with Nest.js provides a robust and scalable platform for publishing and interacting with articles, as well as for managing users and implementing a following system.
 
-## Installation
+## Getting Started
+
+### Prerequisites
+
+* git should be installed (recommended v2.4.11 or higher)
+* docker and docker compose should be installed
+
+### Instalation
 
 ```bash
-$ yarn install
+$ git pull https://github.com/Leticia-NdO/blog_nestjs.git
 ```
 
 ## Running the app
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+$ docker-compose up --build
 ```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Leticia Neves de Oliveira](https://www.linkedin.com/in/leticia-neves-192940234/)
 
 ## License
 
