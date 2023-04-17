@@ -12,8 +12,8 @@ Overall, this RESTful API built with Nest.js provides a robust and scalable plat
 
 ### Prerequisites
 
-* git should be installed (recommended v2.4.11 or higher)
-* docker and docker compose should be installed
+* **git** should be installed (recommended v2.4.11 or higher)
+* **docker** and docker compose should be installed
 
 ### Instalation
 
@@ -23,9 +23,13 @@ $ git pull https://github.com/Leticia-NdO/blog_nestjs.git
 
 ## Running the app
 
+Make sure to open a terminal on the project's directory and then run:
+
 ```bash
 $ docker-compose up --build
 ```
+
+And that's it! The API must be running on port 3000.
 
 ## Stay in touch
 
