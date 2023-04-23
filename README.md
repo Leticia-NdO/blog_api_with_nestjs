@@ -13,7 +13,7 @@ Overall, this RESTful API built with Nest.js provides a robust and scalable plat
 ### Prerequisites
 
 * **git** should be installed (recommended v2.4.11 or higher)
-* **docker** and docker compose should be installed
+* **docker** and **docker compose** should be installed
 
 ### Instalation
 
@@ -30,6 +30,14 @@ $ docker-compose up --build
 ```
 
 And that's it! The API must be running on port 3000.
+
+## Features in development
+
+* I'm currently working to detach the business rules from the NestJS Framework, so that the API can use all the advantages NestJS offers without being perpetually tied to it. I'm doing so by concentrating the business rules in a folder called 'core', outside NestJS domain;
+* The Swagger documentation;
+* The 'comments' module;
+* The creation of the distinction between common users and premium users;
+* The creation of a payment system.
 
 ## Stay in touch
 
