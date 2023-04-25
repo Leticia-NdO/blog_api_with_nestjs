@@ -41,7 +41,7 @@ And that's it! The API must be running on port 3000.
 
 ## Stay in touch
 
-- Author - [Leticia Neves de Oliveira](https://www.linkedin.com/in/leticia-neves-192940234/)
+- Author - [Leticia Neves de Oliveira](https://www.linkedin.com/in/leticia-neves-dev/)
 
 ## License
 
