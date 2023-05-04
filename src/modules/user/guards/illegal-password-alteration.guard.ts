@@ -2,19 +2,18 @@ import {
   CanActivate,
   ExecutionContext,
   HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
+  HttpStatus
+} from '@nestjs/common'
+import { Observable } from 'rxjs'
 
 export class IllegalPasswordAlteration implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
+  canActivate (
+    context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const body = context.switchToHttp().getRequest().body;
+    const body = context.switchToHttp().getRequest().body
 
-    if (body.user.password)
-      throw new HttpException('Forbidden', HttpStatus.UNAUTHORIZED);
+    if (body.user.password) { throw new HttpException('Forbidden', HttpStatus.UNAUTHORIZED) }
 
-    return true;
+    return true
   }
 }

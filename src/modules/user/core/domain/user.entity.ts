@@ -5,41 +5,41 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { hash } from 'bcrypt';
-import { ArticleEntity } from '../../../article/core/domain/article.entity';
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { hash } from 'bcrypt'
+import { ArticleEntity } from '../../../article/core/domain/article.entity'
 
 @Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+    id: number
 
   @Column()
-  username: string;
+    username: string
 
   @Column()
-  email: string;
+    email: string
 
   @Column({ default: '' })
-  bio: string;
+    bio: string
 
   @Column({ default: '' })
-  image: string;
+    image: string
 
   @Column({ select: false })
-  password: string;
+    password: string
 
   @BeforeInsert()
-  async hashPassword() {
-    this.password = await hash(this.password, 12);
+  async hashPassword (): Promise<void> {
+    this.password = await hash(this.password, 12)
   }
 
   // it means one User can have severeal articles, and the second argument says the name of the foreign key to be created at articles with the name of 'author'
   @OneToMany(() => ArticleEntity, (article) => article.author)
-  articles: ArticleEntity[];
+    articles: ArticleEntity[]
 
   @ManyToMany(() => ArticleEntity) // it means this entity has a many to many relationship with ArticlesEntiry
   @JoinTable() // it is creating a new table with the two primary keys
-  favorites: ArticleEntity[]; // here we give this entity an alias of favorites
+    favorites: ArticleEntity[] // here we give this entity an alias of favorites
 }

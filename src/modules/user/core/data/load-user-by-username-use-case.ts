@@ -1,9 +1,9 @@
-import { UserResponse } from '../../types/user-response.interface';
-import { FindUserByUsernameRepositoryInterface } from '../domain/repository/find-user-by-username-repository-interface';
-import { buildUserResponse } from './helpers/user-response-helper';
+import { UserResponse } from '../../types/user-response.interface'
+import { FindUserByUsernameRepositoryInterface } from '../domain/repository/find-user-by-username-repository-interface'
+import { buildUserResponse } from './helpers/user-response-helper'
 
 export class LoadUserByUsernameUseCase {
-  constructor(
+  constructor (
     private readonly findUserByUsernameRepository: FindUserByUsernameRepositoryInterface
   ) {}
 
