@@ -11,37 +11,41 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { CreateUserUseCase } from './core/data/create-user-use-case';
+import { buildUserResponse } from './core/data/helpers/user-response-helper';
+import { LoginUser } from './core/data/login-user-use-case';
+import { UpdateUser } from './core/data/update-user-use-case';
 import { User } from './decorators/user.decorator';
 import { AuthGuard } from './guards/auth.guard';
 import { IllegalPasswordAlteration } from './guards/illegal-password-alteration.guard';
 import { UserResponse } from './types/user-response.interface';
-import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly loginUseCase: LoginUser,
+    private readonly updateUserUseCase: UpdateUser) {}
 
   @Post()
   @UsePipes(new ValidationPipe())
   async createUser(
     @Body('user') createUserDto: CreateUserDto,
   ): Promise<UserResponse> {
-    const userEntity = await this.userService.createUser(createUserDto);
-    return this.userService.buildUserResponse(userEntity);
+    return this.createUserUseCase.create(createUserDto)
   }
 
   @Post('login')
   @UsePipes(new ValidationPipe())
   async login(@Body('user') loginUserDto: LoginUserDto): Promise<UserResponse> {
-    const userEntity = await this.userService.loginUser(loginUserDto);
-    return this.userService.buildUserResponse(userEntity);
+    return this.loginUseCase.login(loginUserDto)
   }
 
   @Get()
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
   currentUser(@User() user: any): UserResponse {
-    return this.userService.buildUserResponse(user);
+    return buildUserResponse(user);
   }
 
   @Put()
@@ -52,7 +56,6 @@ export class UserController {
     @Body('user') updateUserDto: UpdateUserDto,
     @User('id') id: number,
   ): Promise<UserResponse> {
-    const userEntity = await this.userService.updateUser(id, updateUserDto);
-    return this.userService.buildUserResponse(userEntity);
+    return this.updateUserUseCase.update(id, updateUserDto)
   }
 }
