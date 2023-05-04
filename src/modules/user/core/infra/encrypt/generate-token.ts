@@ -8,6 +8,6 @@ export const generateToken = (userEntity: UserEntity): string => {
       username: userEntity.username,
       email: userEntity.email,
     },
-    process.env.ENCRYPTING_SECRET
+    process.env.JWT_SECRET
   );
 }
