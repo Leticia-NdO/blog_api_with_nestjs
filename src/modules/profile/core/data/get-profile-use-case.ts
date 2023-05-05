@@ -1,28 +1,18 @@
-import { UserEntity } from '@app/modules/user/core/domain/user.entity'
-import { Repository } from 'typeorm'
+import { FindUserByIdRepositoryInterface } from '@app/modules/user/core/domain/repository/find-user-by-id-repository-interface'
 import { ProfileResponseInterface } from '../../types/profile-response.interface'
-import { FollowEntity } from '../domain/follow.entity'
+import { FindOneFollowRepositoryInterface } from '../domain/repository/find-one-follow-repository-interface'
 import { buildProfileResponse } from './helpers/profile-response-helper'
 
 export class GetProfileUseCase {
   constructor (
-    private readonly userRepository: Repository<UserEntity>,
-    private readonly followRepository: Repository<FollowEntity>
+    private readonly findUserByIdRepository: FindUserByIdRepositoryInterface,
+    private readonly findOneFollowRepository: FindOneFollowRepositoryInterface
   ) {}
 
   async getProfile (userToBeViewedId: number, currentUserId: number): Promise<ProfileResponseInterface> {
-    const profile = await this.userRepository.findOne({
-      where: {
-        id: userToBeViewedId
-      }
-    })
+    const profile = await this.findUserByIdRepository.find(userToBeViewedId)
 
-    const follow = await this.followRepository.findOne({
-      where: {
-        followingId: profile.id,
-        followerId: currentUserId
-      }
-    })
+    const follow = await this.findOneFollowRepository.find(currentUserId, userToBeViewedId)
 
     return buildProfileResponse({
       ...profile,
