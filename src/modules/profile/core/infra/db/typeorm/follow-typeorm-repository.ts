@@ -1,6 +1,8 @@
-import { Repository } from 'typeorm'
+import { UserEntity } from '@app/modules/user/core/domain/user.entity'
+import { In, Repository } from 'typeorm'
 import { FollowEntity } from '../../../domain/follow.entity'
 import { FindAllFollowingsRepositoryInterface } from '../../../domain/repository/find-all-followings-repository-interface'
+import { FindAllProfilesRepositoryInterface } from '../../../domain/repository/find-all-profiles-repository-interface'
 import { FindOneFollowRepositoryInterface } from '../../../domain/repository/find-one-follow-repository-interface'
 import { FollowProfileRepositoryInterface } from '../../../domain/repository/follow-profile-repository-interface'
 import { UnfollowProfileRepositoryInterface } from '../../../domain/repository/unfollow-profile-repository-interface'
@@ -9,8 +11,11 @@ export class FollowTypeormRepository implements
   FindAllFollowingsRepositoryInterface,
   FindOneFollowRepositoryInterface,
   FollowProfileRepositoryInterface,
-  UnfollowProfileRepositoryInterface {
-  constructor (private readonly followRepository: Repository<FollowEntity>) {}
+  UnfollowProfileRepositoryInterface,
+  FindAllProfilesRepositoryInterface {
+  constructor (
+    private readonly followRepository: Repository<FollowEntity>,
+    private readonly userRepository: Repository<UserEntity>) {}
 
   async findAllFollowings (userId: number): Promise<FollowEntity[]> {
     const follow = await this.followRepository.find({
@@ -41,6 +46,18 @@ export class FollowTypeormRepository implements
     })
 
     return follows
+  }
+
+  async findAllProfiles (ids?: number[]): Promise<UserEntity[]> {
+    if (ids) {
+      return await this.userRepository.find({
+        where: {
+          id: In(ids)
+        }
+      })
+    } else {
+      return await this.userRepository.find()
+    }
   }
 
   async follow (userId: number, profileToBeFollowedId: number): Promise<void> {
