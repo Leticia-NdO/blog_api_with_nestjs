@@ -14,7 +14,7 @@ export class GetFollowingsUseCase {
 
     const followingIds = follow.map((foll) => foll.followingId)
 
-    const profiles = await this.findAllProfilesRepositoryInterface.find(followingIds)
+    const profiles = await this.findAllProfilesRepositoryInterface.findAllProfiles(followingIds)
 
     return buildProfileBulkResponse(profiles.map((prof) => {
       return {
