@@ -1,28 +1,27 @@
-import { UserEntity } from '@app/modules/user/core/domain/user.entity'
-import { Repository, In } from 'typeorm'
 import { ProfileBulkResponseInterface } from '../../types/profile-bulk-response.interface'
-import { FollowEntity } from '../domain/follow.entity'
+import { FindAllFollowingsRepositoryInterface } from '../domain/repository/find-all-followings-repository-interface'
+import { FindAllProfilesRepositoryInterface } from '../domain/repository/find-all-profiles-repository-interface'
 
-export class GetFollowingUseCase {
+export class GetFollowingsUseCase {
   constructor (
-    private readonly userRepository: Repository<UserEntity>,
-    private readonly followRepository: Repository<FollowEntity>
+    private readonly findAllFollowingsRepositoryInterface: FindAllFollowingsRepositoryInterface,
+    private readonly findAllProfilesRepositoryInterface: FindAllProfilesRepositoryInterface
   ) {}
 
-  async getFollowings (userId: number): Promise<ProfileBulkResponseInterface> {
-    const follow = await this.followRepository.find({
-      where: {
-        followerId: userId
-      }
-    })
+  async get (userId: number): Promise<ProfileBulkResponseInterface> {
+    const follow = await this.findAllFollowingsRepositoryInterface.find(userId)
 
     const followingIds = follow.map((foll) => foll.followingId)
 
-    const profiles = await this.userRepository.find({
-      where: {
-        id: In(followingIds)
-      }
-    })
-    return { profiles }
+    const profiles = await this.findAllProfilesRepositoryInterface.find(followingIds)
+
+    return {
+      profiles: profiles.map((prof) => {
+        return {
+          ...prof,
+          following: true
+        }
+      })
+    }
   }
 }
