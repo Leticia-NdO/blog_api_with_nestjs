@@ -12,7 +12,7 @@ export class GetProfileUseCase {
   async getProfile (userToBeViewedId: number, currentUserId: number): Promise<ProfileResponseInterface> {
     const profile = await this.findUserByIdRepository.find(userToBeViewedId)
 
-    const follow = await this.findOneFollowRepository.find(currentUserId, userToBeViewedId)
+    const follow = await this.findOneFollowRepository.findOne(currentUserId, userToBeViewedId)
 
     return buildProfileResponse({
       ...profile,
