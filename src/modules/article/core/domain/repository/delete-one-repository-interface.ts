@@ -1,3 +1,3 @@
 export interface DeleteOneArticleRepositoryInterface {
-  deleteBySlug: (slug: string) => Promise<boolean>;
+  deleteBySlug: (slug: string) => Promise<boolean>
 }

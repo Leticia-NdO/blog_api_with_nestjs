@@ -1,22 +1,22 @@
-import { PersistArticleDto } from '../../dto/persist-article.dto';
-import { ArticleResponseInterface } from '../../types/article-response.interface';
-import { UpdateOneArticleRepositoryInterface } from '../domain/repository/update-one-repository-interface';
-import { buildArticleResponse } from './helpers/article-reponse-helper';
+import { PersistArticleDto } from '../../dto/persist-article.dto'
+import { ArticleResponseInterface } from '../../types/article-response.interface'
+import { UpdateOneArticleRepositoryInterface } from '../domain/repository/update-one-repository-interface'
+import { buildArticleResponse } from './helpers/article-reponse-helper'
 
 export class UpdateArticleBySlugUseCase {
-  constructor(
-    private readonly updateRepository: UpdateOneArticleRepositoryInterface,
+  constructor (
+    private readonly updateRepository: UpdateOneArticleRepositoryInterface
   ) {}
 
-  async update(
+  async update (
     slug: string,
-    updateArticleDto: PersistArticleDto,
+    updateArticleDto: PersistArticleDto
   ): Promise<ArticleResponseInterface> {
     const updatedArticle = await this.updateRepository.update(
       updateArticleDto,
-      slug,
-    );
+      slug
+    )
 
-    return buildArticleResponse(updatedArticle);
+    return buildArticleResponse(updatedArticle)
   }
 }

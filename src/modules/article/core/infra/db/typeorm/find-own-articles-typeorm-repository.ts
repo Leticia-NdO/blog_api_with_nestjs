@@ -1,39 +1,38 @@
-import { ArticleBulkResponseInterface } from '@app/modules/article/types/article-bulk-response.interface';
-import { ArticleQueries } from '@app/modules/article/types/article-queries.interface';
-import { DataSource } from 'typeorm';
-import { ArticleEntity } from '../../../domain/article.entity';
-import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository-interface';
+import { ArticleBulkResponseInterface } from '@app/modules/article/types/article-bulk-response.interface'
+import { ArticleQueries } from '@app/modules/article/types/article-queries.interface'
+import { DataSource } from 'typeorm'
+import { ArticleEntity } from '../../../domain/article.entity'
+import { FindAllArticlesRepositoryInterface } from '../../../domain/repository/article-find-all-repository-interface'
 
 export class FindOwnArticlesTypeormRepository
-  implements FindAllArticlesRepositoryInterface
-{
-  constructor(private dataSource: DataSource) {}
+implements FindAllArticlesRepositoryInterface {
+  constructor (private readonly dataSource: DataSource) {}
 
-  async findAll(
+  async findAll (
     userId: number,
-    queries: ArticleQueries,
+    queries: ArticleQueries
   ): Promise<ArticleBulkResponseInterface> {
     const queryBuilder = this.dataSource
       .getRepository(ArticleEntity)
       .createQueryBuilder('articles')
       .innerJoin('articles.author', 'author')
-      .where('author.id = :id', { id: userId });
+      .where('author.id = :id', { id: userId })
 
-    const articlesCount = await queryBuilder.getCount();
+    const articlesCount = await queryBuilder.getCount()
 
     if (queries.limit) {
-      queryBuilder.limit(queries.limit);
+      queryBuilder.limit(queries.limit)
     }
 
     if (queries.offset) {
-      queryBuilder.offset(queries.offset);
+      queryBuilder.offset(queries.offset)
     }
 
-    const articles = await queryBuilder.getMany();
+    const articles = await queryBuilder.getMany()
 
     return {
       articles,
-      articlesCount,
-    };
+      articlesCount
+    }
   }
 }

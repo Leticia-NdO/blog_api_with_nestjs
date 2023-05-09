@@ -1,14 +1,14 @@
 // import { ArticleBulkResponseInterface } from '@app/modules/article/types/article-bulk-response.interface';
-import { ArticleResponseInterface } from '@app/modules/article/types/article-response.interface';
-import { ArticleEntity } from '../../domain/article.entity';
+import { ArticleResponseInterface } from '@app/modules/article/types/article-response.interface'
+import { ArticleEntity } from '../../domain/article.entity'
 
 export const buildArticleResponse = (
-  articleEntity: ArticleEntity,
+  articleEntity: ArticleEntity
 ): ArticleResponseInterface => {
   return {
-    article: articleEntity,
-  };
-};
+    article: articleEntity
+  }
+}
 
 // export const buildArticleBulkResponse = (
 //   articleEntities: ArticleEntity[],

@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm';
-import { FollowEntity } from '../profile/follow.entity';
-import { UserEntity } from '../user/user.entity';
-import { ArticleController } from './article.controller';
-import { ArticleEntity } from './core/domain/article.entity';
-import { DataSource } from 'typeorm';
+import { Module } from '@nestjs/common'
+import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm'
+import { FollowEntity } from '../profile/core/domain/follow.entity'
+import { UserEntity } from '../user/core/domain/user.entity'
+import { ArticleController } from './article.controller'
+import { ArticleEntity } from './core/domain/article.entity'
+import { DataSource } from 'typeorm'
 
 // repository interfaces
 import {
@@ -14,8 +14,8 @@ import {
   DeleteOneArticleRepositoryInterface,
   UpdateOneArticleRepositoryInterface,
   LikeArticleRepositoryInterface,
-  DislikeArticleRepositoryInterface,
-} from './core/domain/repository';
+  DislikeArticleRepositoryInterface
+} from './core/domain/repository'
 
 // repository implementations
 import {
@@ -27,8 +27,8 @@ import {
   UpdateOneArticleTypeormRepository,
   LikeArticleTypeormRepository,
   FindAllArticlesTypeormRepository,
-  DislikeArticleTypeormRepository,
-} from './core/infra/db/typeorm';
+  DislikeArticleTypeormRepository
+} from './core/infra/db/typeorm'
 
 // use-cases
 import {
@@ -40,12 +40,12 @@ import {
   ListAllArticlesUseCase,
   ListOwnArticlesUseCase,
   LoadArticleBySlugUseCase,
-  UpdateArticleBySlugUseCase,
-} from './core/data';
+  UpdateArticleBySlugUseCase
+} from './core/data'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ArticleEntity, UserEntity, FollowEntity]),
+    TypeOrmModule.forFeature([ArticleEntity, UserEntity, FollowEntity])
   ],
   providers: [
     {
@@ -53,17 +53,17 @@ import {
       useFactory: (dataSource: DataSource) => {
         return new FindAllArticlesTypeormRepository(
           dataSource.getRepository(UserEntity),
-          dataSource,
-        );
+          dataSource
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: FindOwnArticlesTypeormRepository,
       useFactory: (dataSource: DataSource) => {
-        return new FindOwnArticlesTypeormRepository(dataSource);
+        return new FindOwnArticlesTypeormRepository(dataSource)
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: GetFeedTypeormRepository,
@@ -71,131 +71,131 @@ import {
         return new GetFeedTypeormRepository(
           dataSource.getRepository(UserEntity),
           dataSource.getRepository(FollowEntity),
-          dataSource,
-        );
+          dataSource
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: CreateArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new CreateArticleTypeormRepository(
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: FindOneArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new FindOneArticleTypeormRepository(
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: DeleteOneArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new DeleteOneArticleTypeormRepository(
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: UpdateOneArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new UpdateOneArticleTypeormRepository(
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: LikeArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new LikeArticleTypeormRepository(
           dataSource.getRepository(UserEntity),
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: DislikeArticleTypeormRepository,
       useFactory: (dataSource: DataSource) => {
         return new DislikeArticleTypeormRepository(
           dataSource.getRepository(UserEntity),
-          dataSource.getRepository(ArticleEntity),
-        );
+          dataSource.getRepository(ArticleEntity)
+        )
       },
-      inject: [getDataSourceToken()],
+      inject: [getDataSourceToken()]
     },
     {
       provide: ListAllArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
-        return new ListAllArticlesUseCase(findAllRepo);
+        return new ListAllArticlesUseCase(findAllRepo)
       },
-      inject: [FindAllArticlesTypeormRepository],
+      inject: [FindAllArticlesTypeormRepository]
     },
     {
       provide: ListOwnArticlesUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
-        return new ListOwnArticlesUseCase(findAllRepo);
+        return new ListOwnArticlesUseCase(findAllRepo)
       },
-      inject: [FindOwnArticlesTypeormRepository],
+      inject: [FindOwnArticlesTypeormRepository]
     },
     {
       provide: GetFeedUseCase,
       useFactory: (findAllRepo: FindAllArticlesRepositoryInterface) => {
-        return new GetFeedUseCase(findAllRepo);
+        return new GetFeedUseCase(findAllRepo)
       },
-      inject: [GetFeedTypeormRepository],
+      inject: [GetFeedTypeormRepository]
     },
     {
       provide: CreateArticleUseCase,
       useFactory: (createRepo: CreateArticleRepositoryInterface) => {
-        return new CreateArticleUseCase(createRepo);
+        return new CreateArticleUseCase(createRepo)
       },
-      inject: [CreateArticleTypeormRepository],
+      inject: [CreateArticleTypeormRepository]
     },
     {
       provide: LoadArticleBySlugUseCase,
       useFactory: (loadRepo: FindOneArticleRepositoryInterface) => {
-        return new LoadArticleBySlugUseCase(loadRepo);
+        return new LoadArticleBySlugUseCase(loadRepo)
       },
-      inject: [FindOneArticleTypeormRepository],
+      inject: [FindOneArticleTypeormRepository]
     },
     {
       provide: DeleteArticleBySlugUseCase,
       useFactory: (deleteRepo: DeleteOneArticleRepositoryInterface) => {
-        return new DeleteArticleBySlugUseCase(deleteRepo);
+        return new DeleteArticleBySlugUseCase(deleteRepo)
       },
-      inject: [DeleteOneArticleTypeormRepository],
+      inject: [DeleteOneArticleTypeormRepository]
     },
     {
       provide: UpdateArticleBySlugUseCase,
       useFactory: (updateRepo: UpdateOneArticleRepositoryInterface) => {
-        return new UpdateArticleBySlugUseCase(updateRepo);
+        return new UpdateArticleBySlugUseCase(updateRepo)
       },
-      inject: [UpdateOneArticleTypeormRepository],
+      inject: [UpdateOneArticleTypeormRepository]
     },
     {
       provide: LikeArticleUseCase,
       useFactory: (likeRepo: LikeArticleRepositoryInterface) => {
-        return new LikeArticleUseCase(likeRepo);
+        return new LikeArticleUseCase(likeRepo)
       },
-      inject: [LikeArticleTypeormRepository],
+      inject: [LikeArticleTypeormRepository]
     },
     {
       provide: DislikeArticleUseCase,
       useFactory: (dislikeRepo: DislikeArticleRepositoryInterface) => {
-        return new DislikeArticleUseCase(dislikeRepo);
+        return new DislikeArticleUseCase(dislikeRepo)
       },
-      inject: [DislikeArticleTypeormRepository],
-    },
+      inject: [DislikeArticleTypeormRepository]
+    }
   ],
-  controllers: [ArticleController],
+  controllers: [ArticleController]
 })
 export class ArticleModule {}

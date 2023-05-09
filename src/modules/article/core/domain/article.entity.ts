@@ -4,40 +4,40 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { UserEntity } from '../../../user/user.entity';
+  UpdateDateColumn
+} from 'typeorm'
+import { UserEntity } from '../../../user/core/domain/user.entity'
 
 @Entity({ name: 'articles' })
 export class ArticleEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+    id: number
 
   @Column()
-  slug: string;
+    slug: string
 
   @Column()
-  title: string;
+    title: string
 
   @Column({ default: '' })
-  description: string;
+    description: string
 
   @Column({ default: '' })
-  body: string;
+    body: string
 
   @CreateDateColumn()
-  createdAt: Date;
+    createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+    updatedAt: Date
 
   @Column('simple-array')
-  tagList: string[];
+    tagList: string[]
 
   @Column({ default: 0 })
-  favorites: number;
+    favorites: number
 
   // it means one article can only have one author, and the second argument says the name of the foreign key to be created at users with the name of 'articles'
   @ManyToOne(() => UserEntity, (user) => user.articles, { eager: true })
-  author: UserEntity;
+    author: UserEntity
 }

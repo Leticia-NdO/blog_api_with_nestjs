@@ -1,5 +1,5 @@
-import { ArticleEntity } from '../article.entity';
+import { ArticleEntity } from '../article.entity'
 
 export interface LikeArticleRepositoryInterface {
-  like: (slug: string, userId: number) => Promise<ArticleEntity>;
+  like: (slug: string, userId: number) => Promise<ArticleEntity>
 }

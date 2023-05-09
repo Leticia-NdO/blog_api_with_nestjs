@@ -1,6 +1,6 @@
-import { ArticleEntity } from '../core/domain/article.entity';
+import { ArticleEntity } from '../core/domain/article.entity'
 
 export interface ArticleBulkResponseInterface {
-  articles: ArticleEntity[];
-  articlesCount: number;
+  articles: ArticleEntity[]
+  articlesCount: number
 }

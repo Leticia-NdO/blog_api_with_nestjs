@@ -1,17 +1,17 @@
-import { ArticleBulkResponseInterface } from '../../types/article-bulk-response.interface';
-import { ArticleQueries } from '../../types/article-queries.interface';
-import { FindAllArticlesRepositoryInterface } from '../domain/repository/article-find-all-repository-interface';
+import { ArticleBulkResponseInterface } from '../../types/article-bulk-response.interface'
+import { ArticleQueries } from '../../types/article-queries.interface'
+import { FindAllArticlesRepositoryInterface } from '../domain/repository/article-find-all-repository-interface'
 
 export class ListAllArticlesUseCase {
-  constructor(
-    private readonly findAllRepo: FindAllArticlesRepositoryInterface,
+  constructor (
+    private readonly findAllRepo: FindAllArticlesRepositoryInterface
   ) {}
 
-  async findAll(
+  async findAll (
     userId: number,
-    queries: ArticleQueries,
+    queries: ArticleQueries
   ): Promise<ArticleBulkResponseInterface> {
-    const articles = await this.findAllRepo.findAll(userId, queries);
-    return articles;
+    const articles = await this.findAllRepo.findAll(userId, queries)
+    return articles
   }
 }

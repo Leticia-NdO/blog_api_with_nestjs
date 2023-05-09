@@ -1,14 +1,14 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator'
 
 export class PersistArticleDto {
   @IsNotEmpty()
-  readonly title: string;
+  readonly title: string
 
   @IsNotEmpty()
-  readonly body: string;
+  readonly body: string
 
   @IsNotEmpty()
-  readonly description: string;
+  readonly description: string
 
-  readonly tagList?: string[];
+  readonly tagList?: string[]
 }

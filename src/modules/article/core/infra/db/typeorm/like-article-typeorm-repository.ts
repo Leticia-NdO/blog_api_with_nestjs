@@ -1,40 +1,40 @@
-import { UserEntity } from '@app/modules/user/user.entity';
-import { Repository } from 'typeorm';
-import { ArticleEntity } from '../../../domain/article.entity';
-import { LikeArticleRepositoryInterface } from '../../../domain/repository/like-article-repository-interface';
+import { UserEntity } from '@app/modules/user/core/domain/user.entity'
+import { Repository } from 'typeorm'
+import { ArticleEntity } from '../../../domain/article.entity'
+import { LikeArticleRepositoryInterface } from '../../../domain/repository/like-article-repository-interface'
 
 export class LikeArticleTypeormRepository
-  implements LikeArticleRepositoryInterface
-{
-  constructor(
+implements LikeArticleRepositoryInterface {
+  constructor (
     private readonly userRepo: Repository<UserEntity>,
-    private readonly articleRepo: Repository<ArticleEntity>,
+    private readonly articleRepo: Repository<ArticleEntity>
   ) {}
-  async like(slug: string, userId: number): Promise<ArticleEntity> {
+
+  async like (slug: string, userId: number): Promise<ArticleEntity> {
     const article = await this.articleRepo.findOne({
       where: {
-        slug,
-      },
-    });
+        slug
+      }
+    })
     const user = await this.userRepo.findOne({
       where: {
-        id: userId,
+        id: userId
       },
-      relations: ['favorites'],
-    });
+      relations: ['favorites']
+    })
 
     const isFavorited =
       user.favorites.findIndex(
-        (articleInFavorites) => articleInFavorites.id === article.id,
-      ) !== -1;
+        (articleInFavorites) => articleInFavorites.id === article.id
+      ) !== -1
 
     if (!isFavorited) {
-      user.favorites.push(article);
-      article.favorites++;
-      await this.userRepo.save(user);
-      await this.articleRepo.save(article);
+      user.favorites.push(article)
+      article.favorites++
+      await this.userRepo.save(user)
+      await this.articleRepo.save(article)
     }
 
-    return article;
+    return article
   }
 }
