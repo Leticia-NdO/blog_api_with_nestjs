@@ -1,4 +1,4 @@
-import { UserEntity } from '@app/modules/user/core/domain/user.entity'
+import { UserType } from '@app/modules/user/types/user.type'
 import { ProfileResponseInterface } from '../../types/profile-response.interface'
 import { FindOneFollowRepositoryInterface } from '../domain/repository/find-one-follow-repository-interface'
 import { FollowProfileRepositoryInterface } from '../domain/repository/follow-profile-repository-interface'
@@ -10,7 +10,7 @@ export class FollowProfileUseCase {
     private readonly followProfileRepository: FollowProfileRepositoryInterface
   ) {}
 
-  async followProfile (profileToBeFollowed: UserEntity, userId: number): Promise<ProfileResponseInterface> {
+  async followProfile (profileToBeFollowed: UserType, userId: number): Promise<ProfileResponseInterface> {
     const follow = await this.findOneFollowRepository.findOne(userId, profileToBeFollowed.id)
 
     if (!follow) {

@@ -1,4 +1,4 @@
-import { UserEntity } from '@app/modules/user/core/domain/user.entity'
+import { UserType } from '@app/modules/user/types/user.type'
 import { ProfileResponseInterface } from '../../types/profile-response.interface'
 import { FindOneFollowRepositoryInterface } from '../domain/repository/find-one-follow-repository-interface'
 import { UnfollowProfileRepositoryInterface } from '../domain/repository/unfollow-profile-repository-interface'
@@ -10,7 +10,7 @@ export class UnfollowProfileUseCase {
     private readonly unfollowRepository: UnfollowProfileRepositoryInterface
   ) {}
 
-  async unfollowProfile (profileToBeUnfollowed: UserEntity, userId: number): Promise<ProfileResponseInterface> {
+  async unfollowProfile (profileToBeUnfollowed: UserType, userId: number): Promise<ProfileResponseInterface> {
     const follow = await this.findOneFollowRepository.findOne(userId, profileToBeUnfollowed.id)
 
     if (follow) {
