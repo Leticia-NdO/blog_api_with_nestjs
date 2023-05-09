@@ -19,11 +19,13 @@ import { FindUserByIdTypeormRepository } from './core/infra/db/typeorm/find-user
 import { FindUserByUsernameTypeormRepository } from './core/infra/db/typeorm/find-user-by-username-typeorm-repository'
 import { UpdateUserTypeormRepository } from './core/infra/db/typeorm/update-user-typeorm-repository'
 import { UserController } from './user.controller'
+import { UserService } from './user.service'
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UserController],
   providers: [
+    UserService,
     {
       provide: CreateUserTypeormRepository,
       useFactory: (dataSource: DataSource) => {
@@ -112,6 +114,6 @@ import { UserController } from './user.controller'
       inject: [UpdateUserTypeormRepository, FindUserByIdTypeormRepository]
     }
   ],
-  exports: [LoadUserByTokenUseCase]
+  exports: [LoadUserByTokenUseCase, LoadUserByUsernameUseCase, FindUserByIdTypeormRepository, UserService]
 })
 export class UserModule {}
