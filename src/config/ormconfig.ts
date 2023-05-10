@@ -1,4 +1,4 @@
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
 
 const config: MysqlConnectionOptions = {
   type: 'mysql',
@@ -9,7 +9,7 @@ const config: MysqlConnectionOptions = {
   database: process.env.MYSQL_DATABASE,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: false,
-  migrations: [__dirname + '/../migrations/**/*{.ts,.js}'],
-};
+  migrations: [__dirname + '/../migrations/**/*{.ts,.js}']
+}
 
-export default config;
+export default config

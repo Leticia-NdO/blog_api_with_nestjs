@@ -1,9 +1,9 @@
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
-import config from './ormconfig';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
+import config from './ormconfig'
 
 const ormseedconfig: MysqlConnectionOptions = {
   ...config,
-  migrations: [__dirname + '/../seeds/**/*{.ts,.js}'],
-};
+  migrations: [__dirname + '/../seeds/**/*{.ts,.js}']
+}
 
-export default ormseedconfig;
+export default ormseedconfig

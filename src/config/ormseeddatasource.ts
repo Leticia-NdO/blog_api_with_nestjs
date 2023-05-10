@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
-import ormseedconfig from './ormseedconfig';
+import { DataSource } from 'typeorm'
+import ormseedconfig from './ormseedconfig'
 
-export default new DataSource(ormseedconfig);
+export default new DataSource(ormseedconfig)
