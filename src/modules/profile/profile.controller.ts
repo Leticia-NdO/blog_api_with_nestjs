@@ -17,7 +17,9 @@ import { GetProfileUseCase } from './core/data/get-profile-use-case'
 import { UnfollowProfileUseCase } from './core/data/unfollow-profile-use-case'
 import { ProfileBulkResponseInterface } from './types/profile-bulk-response.interface'
 import { ProfileResponseInterface } from './types/profile-response.interface'
+import { ApiTags, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiBearerAuth, ApiNotFoundResponse } from '@nestjs/swagger'
 
+@ApiTags('Profiles')
 @Controller('profiles')
 export class ProfileController {
   constructor (
@@ -28,6 +30,13 @@ export class ProfileController {
     private readonly unollowProfileUseCase: UnfollowProfileUseCase
   ) {}
 
+
+  /* ------------------------Swagger------------------------ */
+  @ApiOperation({ summary: 'Return all profiles followed by the user' })
+  @ApiOkResponse({ description: 'Successfully get profiles' })
+  @ApiForbiddenResponse({ description: 'Access Denied' })
+  @ApiBearerAuth('Authorization')
+  /* ------------------------------------------------------- */
   @Get('following')
   @UseGuards(AuthGuard)
   async getFollowings (
@@ -37,6 +46,14 @@ export class ProfileController {
     return await this.getFollowingsUseCase.get(userId)
   }
 
+
+  /* ------------------------Swagger------------------------ */
+  @ApiOperation({ summary: 'Return one profile' })
+  @ApiOkResponse({ description: 'Successfully get profile' })
+  @ApiForbiddenResponse({ description: 'Access Denied' })
+  @ApiNotFoundResponse({ description: 'Profile Not Found' })
+  @ApiBearerAuth('Authorization')
+  /* ------------------------------------------------------- */
   @Get(':username')
   @UseGuards(AuthGuard)
   async getProfile (
@@ -51,6 +68,14 @@ export class ProfileController {
     return await this.getProfileUseCase.getProfile(userToBeViewed.user.id, userId)
   }
 
+
+  /* ------------------------Swagger------------------------ */
+  @ApiOperation({ summary: 'Follow profile' })
+  @ApiOkResponse({ description: 'Successfully follow profile' })
+  @ApiForbiddenResponse({ description: 'Access Denied' })
+  @ApiNotFoundResponse({ description: 'Profile Not Found' })
+  @ApiBearerAuth('Authorization')
+  /* ------------------------------------------------------- */
   @Post(':username/follow')
   @UseGuards(AuthGuard)
   async followProfile (
@@ -71,6 +96,14 @@ export class ProfileController {
     return await this.followProfileUseCase.followProfile(userToBeFollowed.user, userId)
   }
 
+  
+  /* ------------------------Swagger------------------------ */
+  @ApiOperation({ summary: 'Unfollow profile' })
+  @ApiOkResponse({ description: 'Successfully unfollow profile' })
+  @ApiForbiddenResponse({ description: 'Access Denied' })
+  @ApiNotFoundResponse({ description: 'Profile Not Found' })
+  @ApiBearerAuth('Authorization')
+  /* ------------------------------------------------------- */
   @Delete(':username/follow')
   @UseGuards(AuthGuard)
   async unfollowProfile (
