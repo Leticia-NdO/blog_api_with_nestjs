@@ -150,6 +150,7 @@ export class ArticleController {
   @ApiCreatedResponse({ description: 'Successfully deleted an article' })
   @ApiNotFoundResponse({ description: 'Article does not exist' })
   @ApiForbiddenResponse({ description: `The current user is not the article's author` })
+  @ApiBearerAuth('Authorization')
   /* ------------------------------------------------------- */
   @Delete(':slug')
   @HttpCode(204)
