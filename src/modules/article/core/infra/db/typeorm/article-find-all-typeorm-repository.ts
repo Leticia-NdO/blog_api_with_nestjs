@@ -37,7 +37,7 @@ implements FindAllArticlesRepositoryInterface {
     }
 
     if (queries.favorited) {
-      // here we're gonna find all the favorites articles of a given user
+      // here we're gonna find all the favorited articles of a given user
       const author = await this.userRepository.findOne({
         where: {
           username: queries.favorited
