@@ -15,6 +15,14 @@ export class TagService {
     return await this.tagRepository.find()
   }
 
+  async findOneTag (name: string): Promise<TagEntity> {
+    return await this.tagRepository.findOne({
+      where: {
+        name
+      }
+    })
+  }
+
   async create (tagToCreated: CreateTagDto): Promise<TagEntity> {
     const newTag = new TagEntity()
     Object.assign(newTag, tagToCreated)
