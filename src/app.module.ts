@@ -7,11 +7,13 @@ import { UserModule } from './modules/user/user.module'
 import { AuthMiddleWare } from './modules/user/middleware/auth-middleware'
 import { ArticleModule } from './modules/article/article.module'
 import { ProfileModule } from './modules/profile/profile.module'
+import { TagModule } from './modules/tag/tag.module'
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(config),
     UserModule,
+    TagModule,
     ProfileModule,
     ArticleModule
   ],
