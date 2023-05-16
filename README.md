@@ -31,6 +31,8 @@ $ docker-compose up --build
 
 And that's it! The API must be running on port 3000. To see the Swagger documentation access http://localhost:3000/docs on your browser.
 
+![swagger docs](https://raw.githubusercontent.com/Leticia-NdO/blog_api_with_nestjs/main/assets/swagger-docs.png)
+
 ## Features in development
 
 * I'm currently working to detach the business rules from the NestJS Framework, so that the API can use all the advantages NestJS offers without being perpetually tied to it. I'm doing so by concentrating the business rules in a folder called 'core', outside NestJS domain;
