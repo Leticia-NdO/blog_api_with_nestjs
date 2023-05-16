@@ -4,7 +4,7 @@
 
 The purpose of this API is to provide functionality for publishing, interacting with, and viewing articles, as well as for creating users and implementing a following system. The articles are displayed in a feed format, allowing users to easily view and interact with them.
 
-The API includes several endpoints that allow users to perform various actions, such as creating and updating articles, liking and commenting on articles, and following other users. Users can also create accounts and manage their profiles through the API.
+The API includes several endpoints that allow users to perform various actions, such as creating, and liking updating articles, and following other users. Users can also create accounts and manage their profiles through the API.
 
 Overall, this RESTful API built with Nest.js provides a robust and scalable platform for publishing and interacting with articles, as well as for managing users and implementing a following system.
 
