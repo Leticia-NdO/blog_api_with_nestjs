@@ -4,7 +4,7 @@
 
 The purpose of this API is to provide functionality for publishing, interacting with, and viewing articles, as well as for creating users and implementing a following system. The articles are displayed in a feed format, allowing users to easily view and interact with them.
 
-The API includes several endpoints that allow users to perform various actions, such as creating and updating articles, liking and commenting on articles, and following other users. Users can also create accounts and manage their profiles through the API.
+The API includes several endpoints that allow users to perform various actions, such as creating, and liking updating articles, and following other users. Users can also create accounts and manage their profiles through the API.
 
 Overall, this RESTful API built with Nest.js provides a robust and scalable platform for publishing and interacting with articles, as well as for managing users and implementing a following system.
 
@@ -18,7 +18,7 @@ Overall, this RESTful API built with Nest.js provides a robust and scalable plat
 ### Instalation
 
 ```bash
-$ git pull https://github.com/Leticia-NdO/blog_nestjs.git
+$ git clone https://github.com/Leticia-NdO/blog_nestjs.git
 ```
 
 ## Running the app
@@ -29,7 +29,7 @@ Make sure to open a terminal on the project's directory and then run:
 $ docker-compose up --build
 ```
 
-And that's it! The API must be running on port 3000.
+And that's it! The API must be running on port 3000. To see the Swagger documentation access http://localhost:3000/docs on your browser.
 
 ## Features in development
 
