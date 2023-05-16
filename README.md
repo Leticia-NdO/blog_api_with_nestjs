@@ -29,7 +29,7 @@ Make sure to open a terminal on the project's directory and then run:
 $ docker-compose up --build
 ```
 
-And that's it! The API must be running on port 3000.
+And that's it! The API must be running on port 3000. To see the Swagger documentation access http://localhost:3000/docs on your browser.
 
 ## Features in development
 
