@@ -18,7 +18,7 @@ Overall, this RESTful API built with Nest.js provides a robust and scalable plat
 ### Instalation
 
 ```bash
-$ git pull https://github.com/Leticia-NdO/blog_nestjs.git
+$ git clone https://github.com/Leticia-NdO/blog_nestjs.git
 ```
 
 ## Running the app
