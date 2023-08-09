@@ -12,7 +12,7 @@ export class IllegalPasswordAlteration implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const body = context.switchToHttp().getRequest().body
 
-    if (body.user.password) { throw new HttpException('Forbidden', HttpStatus.UNAUTHORIZED) }
+    if (body.user?.password) { throw new HttpException('Forbidden to change password by this means', HttpStatus.UNAUTHORIZED) }
 
     return true
   }

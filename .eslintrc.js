@@ -20,6 +20,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-invalid-void-type': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
-    'n/no-path-concat': 'off'
+    'n/no-path-concat': 'off',
+    'import/no-duplicates': 'off'
   },
 };

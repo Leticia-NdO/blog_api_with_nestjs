@@ -8,7 +8,9 @@ export class UpdateUser {
   constructor (private readonly updateUserRepository: UpdateUserRepositoryInterface, private readonly loadUserByIdRepository: FindUserByIdRepositoryInterface) {}
 
   async update (userId: number, updateUserDto: UpdateUserDto): Promise<UserResponse> {
-    await this.updateUserRepository.update(updateUserDto, userId)
+    if (Object.keys(updateUserDto).length !== 0) {
+      await this.updateUserRepository.update(updateUserDto, userId)
+    }
 
     const updatedUser = await this.loadUserByIdRepository.find(userId)
 
