@@ -8,6 +8,8 @@ The API includes several endpoints that allow users to perform various actions, 
 
 Overall, this RESTful API built with Nest.js provides a robust and scalable platform for publishing and interacting with articles, as well as for managing users and implementing a following system.
 
+One important technical detail about this project is that I worked to detach the business rules from the NestJS Framework so that the API can use all the advantages NestJS offers without being perpetually tied to it. I did so by concentrating the business rules in a folder called 'core' outside the NestJS domain.
+
 ## Getting Started
 
 ### Prerequisites
@@ -31,10 +33,10 @@ $ docker-compose up --build
 
 And that's it! The API must be running on port 3000. To see the Swagger documentation access http://localhost:3000/docs on your browser.
 
+![swagger docs](https://raw.githubusercontent.com/Leticia-NdO/blog_api_with_nestjs/main/assets/swagger-docs.png)
+
 ## Features in development
 
-* I'm currently working to detach the business rules from the NestJS Framework, so that the API can use all the advantages NestJS offers without being perpetually tied to it. I'm doing so by concentrating the business rules in a folder called 'core', outside NestJS domain;
-* The Swagger documentation;
 * The 'comments' module;
 * The creation of the distinction between common users and premium users;
 * The creation of a payment system.
